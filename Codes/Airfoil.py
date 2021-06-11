@@ -1,89 +1,62 @@
-# ==============================================================================
-# Points of an airfoil:
-#     self.verts[0] = most left
-#     self.verts[1] = top left
-#     self.verts[2] = most top
-#     self.verts[3] = top right
-#     self.verts[4] = most right
-#     self.verts[5] = bot right
-#     self.verts[6] = most bot
-#     self.verts[7] = bot left
-#     self.verts[8] = chord left
-#     self.verts[9] = center
-#     self.verts[10] = chord right
-# ==============================================================================
 import os
-from Parent import Parent
-from CustomMath import RotateOnAngle
-# ==============================================================================
-class Airfoil(Parent):
-    def __init__(self, airfoilNumber, target=None, angle=0):
-        self.vertCount = [Parent.vertCount + i for i in range(11)]
-        Parent.vertCount += 11
-
-        self.verts = [0] * 11
-
-        self.top0 = []
-        self.top1 = []
-        self.top2 = []
-        self.top3 = []
-
-        self.bot0 = []
-        self.bot1 = []
-        self.bot2 = []
-        self.bot3 = []
-        if target == None:
-            self.CreateVerts(airfoilNumber)
+from CustomMath import Sin, Cos, ASin, ACos, RotateOnAngle
+class Airfoil:
+    def __init__(self, airfoilNumber, latestVertCount = 0, refHub = None, angle = 0):
+        self.airfoilNumber = airfoilNumber
+        firstVert = latestVertCount + (12 * self.airfoilNumber)
+        self.vertCount = [firstVert + i for i in range(12)]
+        self.bLeftTop = []
+        self.bRightTop = []
+        self.bLeftBot = []
+        self.bRightBot = []
+        self.shell = []
+        self.arc = []
+        if refHub == None:
+            self.SplitVertsTo4Parts()
+            self.CalculateShell()
         else:
-            self.CopyAirfoil(target, angle)
+            self.CopyVerts(refHub, angle)
 
-# ==============================================================================
-    def CreateVerts(self, airfoilNumber):
+            
+    def SplitVertsTo4Parts(self):
         coord = []
         index = []
         top = []
         bot = []
-
-        # Searching for airfoil files
-        for line in open(os.path.abspath( \
-                f'../Coordinates/airfoil{airfoilNumber}' \
-                ), "r"):
-            # Assing Coordinates
+        #Searching for airfoil files
+        for line in open(os.path.abspath(f'../Coordinates/airfoil{self.airfoilNumber}'), "r"):
+            #Assing Coordinates
             if line.startswith('v'):
-                coord.append([round(float(line.split()[1]), 4), \
-                              round(float(line.split()[2]), 4), \
-                              round(-1.0 * float(line.split()[3]), 4)])
-            # Assign Indices
+                coord.append((round(float(line.split()[1]), 4),\
+                                       round(float(line.split()[2]), 4),\
+                                        round(-1.0 * float(line.split()[3]), 4)))
+            #Assign Indices
             elif line.startswith('l'):
-                index.append((int(line.split()[1]) - 1, int(line.split()[2]) - 1))
-
-        # if airfoilNumber == 0:
-        #    for i in range(len(coord)):
-        #        coord[i][2] = coord[i][2] + 0.5
-
-        # Finding most left and right points
-        self.verts[4] = (1000, 0, 0)
-        self.verts[0] = (-1000, 0, 0)
+                index.append((int(line.split()[1])-1, int(line.split()[2])-1))
+               
+        #Finding most left and right points
+        self.mostRight  = (1000, 0, 0)
+        self.mostLeft = (-1000, 0, 0)
         for line in coord:
-            if line[0] < self.verts[4][0]:
-                self.verts[4] = line
-            if line[0] > self.verts[0][0]:
-                self.verts[0] = line
-
-        # Finding upper point from MostRight
+            if line[0] < self.mostRight[0]:
+                self.mostRight = line
+            if line[0] > self.mostLeft[0]:
+                self.mostLeft= line
+               
+        #Finding upper point from MostRight
         for line in index:
-            if coord[line[0]] == self.verts[4]:
-                if coord[line[1]][1] > self.verts[4][1]:
-                    previousPoint = self.verts[4]
+            if coord[line[0]] == self.mostRight:
+                if coord[line[1]][1] > self.mostRight[1]:
+                    previousPoint = self.mostRight
                     currentPoint = coord[line[1]]
                     break
-            if coord[line[1]] == self.verts[4]:
-                if coord[line[0]][1] > self.verts[4][1]:
-                    previousPoint = self.verts[4]
+            if coord[line[1]] == self.mostRight:
+                if coord[line[0]][1] > self.mostRight[1]:
+                    previousPoint = self.mostRight
                     currentPoint = coord[line[0]]
-                    break
-
-                    # Assing coordinates to Top and Bot
+                    break      
+                    
+        #Assing coordinates to Top and Bot
         onTop = True
         while True:
             if onTop:
@@ -99,78 +72,122 @@ class Airfoil(Parent):
                         previousPoint = currentPoint
                         currentPoint = coord[line[0]]
                         break
-            if currentPoint == self.verts[4]:
+            if currentPoint == self.mostRight:
                 break
             if not onTop:
                 bot.append(currentPoint)
-            elif currentPoint == self.verts[0]:
+            elif currentPoint == self.mostLeft:
                 onTop = False
+                
+        #Calculate Center point for the front circle       
+        self.center = [self.mostRight[0] + 0.2*\
+                        (self.mostLeft[0] - self.mostRight[0]),\
+                        (self.mostLeft[1] + self.mostRight[1])/2,\
+                        (self.mostLeft[2] + self.mostRight[2])/2]
 
-        self.verts[1] = top[round(len(top) * 0.7)]  # 83
-        self.verts[2] = top[round(len(top) * 0.5)]
-        self.verts[3] = top[round(len(top) * 0.25)]  # 13
-        self.verts[5] = bot[round(len(bot) * 0.75)]  # 83
-        self.verts[6] = bot[round(len(bot) * 0.5)]
-        self.verts[7] = bot[round(len(bot) * 0.3)]  # 13
-        self.verts[8] = [0, 0, 0]
-        self.verts[9] = [0, 0, 0]
-        self.verts[10] = [0, 0, 0]
-
-        CLT = top[round(len(top) * 0.66)]
-        CLB = bot[round(len(bot) * 0.33)]
-        CRT = top[round(len(top) * 0.3)]
-        CRB = bot[round(len(bot) * 0.66)]
-
-        for i in range(3):
-            self.verts[8][i] = (CLT[i] + CLB[i]) / 2
-            self.verts[9][i] = (self.verts[2][i] + self.verts[6][i]) / 2
-            self.verts[10][i] = (CRT[i] + CRB[i]) / 2
-
+        #Finding MostTop and MostBot
+        delta = 1000
         for line in top:
-            if line != self.verts[1] and \
-                    line != self.verts[2] and line != self.verts[3]:
-                if line[0] > self.verts[1][0]:
-                    self.top0.append(line)
-                elif line[0] > self.verts[2][0]:
-                    self.top1.append(line)
-                elif line[0] > self.verts[3][0]:
-                    self.top2.append(line)
-                else:
-                    self.top3.append(line)
-
+            if delta > abs(self.center[0] - line[0]):
+                self.mostTop = line
+                delta = abs(self.center[0] - line[0])
+        delta = 1000
         for line in bot:
-            if line != self.verts[7] and \
-                    line != self.verts[6] and line != self.verts[5]:
-                if line[0] > self.verts[7][0]:
-                    self.bot0.append(line)
-                elif line[0] > self.verts[6][0]:
-                    self.bot1.append(line)
-                elif line[0] > self.verts[5][0]:
-                    self.bot2.append(line)
-                else:
-                    self.bot3.append(line)
+            if delta > abs(self.center[0] - line[0]):
+                self.mostBot = line
+                delta = abs(self.center[0] - line[0])
+                
+        #Dividing Top and Bot to TopLeft/TopRight/BotLeft/BotRight
+        for line in top:
+            if line[0] > self.mostTop[0]:
+                self.bLeftTop.append(line)
+            else:
+                self.bRightTop.append(line)
+        for line in bot:
+            if line[0] > self.mostBot[0]:
+                self.bLeftBot.append(line)
+            else:
+                self.bRightBot.append(line)
+         
+    def CalculateShell(self):
+        center = [-1.0964, 0, self.center[2]]#0.035
+        outerBound = 3
+        if self.airfoilNumber == 0 or self.airfoilNumber == 15:
+            x = [center[0] - outerBound,\
+                 center[0],\
+                 self.mostLeft[0] + (outerBound/2),\
+                 8]
+        else:
+            x = [center[0] - outerBound,\
+                 center[0],\
+                 self.mostLeft[0],\
+                 8]
+        y = [-outerBound,\
+             center[1],\
+             outerBound]
+        z = center[2]
 
-# ==============================================================================
-
-    def CopyAirfoil(self, target, angle):
-        for i in range(11):
-            self.verts[i] = RotateOnAngle(target.verts[i], angle)
-
-        for line in target.top0:
-            self.top0.append(RotateOnAngle(line, angle))
-        for line in target.top1:
-            self.top1.append(RotateOnAngle(line, angle))
-        for line in target.top2:
-            self.top2.append(RotateOnAngle(line, angle))
-        for line in target.top3:
-            self.top3.append(RotateOnAngle(line, angle))
-
-        for line in target.bot0:
-            self.bot0.append(RotateOnAngle(line, angle))
-        for line in target.bot1:
-            self.bot1.append(RotateOnAngle(line, angle))
-        for line in target.bot2:
-            self.bot2.append(RotateOnAngle(line, angle))
-        for line in target.bot3:
-            self.bot3.append(RotateOnAngle(line, angle))
-# ==============================================================================
+        self.shell.append((x[3], self.mostLeft[1], z))#4
+        self.shell.append((x[3], y[2], z))#5
+        self.shell.append((x[2], y[2], z))#6
+        self.shell.append((x[1], y[2], z))#7
+        self.shell.append((x[0], y[1], z))#8
+        self.shell.append((x[1], y[0], z))#9
+        self.shell.append((x[2], y[0], z))#10
+        self.shell.append((x[3], y[0], z))#11
+        self.arc.append((center[0] - outerBound*Cos(45), center[1] + outerBound*Sin(45), z))
+        self.arc.append((center[0] - outerBound*Cos(45), center[1] - outerBound*Sin(45), z))
+            
+        
+        
+    def CopyVerts(self, refHub, angle):
+        self.mostLeft = RotateOnAngle(refHub.mostLeft, angle)
+        self.mostRight = RotateOnAngle(refHub.mostRight, angle)
+        self.mostTop = RotateOnAngle(refHub.mostTop, angle)
+        self.mostBot = RotateOnAngle(refHub.mostBot, angle)
+        self.bLeftTop = [RotateOnAngle(line, angle) for line in refHub.bLeftTop]
+        self.bRightTop = [RotateOnAngle(line, angle) for line in refHub.bRightTop]
+        self.bLeftBot = [RotateOnAngle(line, angle) for line in refHub.bLeftBot]
+        self.bRightBot = [RotateOnAngle(line, angle) for line in refHub.bRightBot]
+        self.shell = [RotateOnAngle(line, angle) for line in refHub.shell]
+        self.arc = [RotateOnAngle(line, angle) for line in refHub.arc]
+    
+                
+    def ExportVerts(self):
+        output = []
+        output.append(self.mostLeft)
+        output.append(self.mostTop)
+        output.append(self.mostRight)
+        output.append(self.mostBot)
+        for line in self.shell:
+            output.append(line)
+        return output
+    
+    
+    def ExportEdges(self):
+        output = []
+        vert = self.vertCount
+        arc = self.arc
+        output.append(f"\nBSpline {vert[0]} {vert[3]}")
+        output.append("\n(")
+        for line in self.bLeftBot:
+            output.append(f"\n\t({line[0]} {line[1]} {line[2]})")
+        output.append("\n)")
+        output.append(f"\nBSpline {vert[3]} {vert[2]}")
+        output.append("\n(")
+        for line in self.bRightBot:
+            output.append(f"\n\t({line[0]} {line[1]} {line[2]})")
+        output.append("\n)")
+        output.append(f"\nBSpline {vert[2]} {vert[1]}")
+        output.append("\n(")
+        for line in self.bRightTop:
+            output.append(f"\n\t({line[0]} {line[1]} {line[2]})")
+        output.append("\n)")
+        output.append(f"\nBSpline {vert[1]} {vert[0]}")
+        output.append("\n(")
+        for line in self.bLeftTop:
+            output.append(f"\n\t({line[0]} {line[1]} {line[2]})")
+        output.append("\n)")
+        output.append(f"\narc {vert[7]} {vert[8]} ({arc[0][0]} {arc[0][1]} {arc[0][2]})")
+        output.append(f"\narc {vert[8]} {vert[9]} ({arc[1][0]} {arc[1][1]} {arc[1][2]})")
+        return output
