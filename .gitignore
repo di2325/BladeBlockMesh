@@ -115,3 +115,5 @@ dmypy.json
 
 # Mac files
 .DS_Store
+
+.idea
