@@ -18,7 +18,6 @@ from Fillers import Fillers
 from Filler import Filler
 from HubFiller import HubFiller
 from SimpleFiller import SimpleFiller
-
 # ==================================================
 # Core variables
 # ==================================================
