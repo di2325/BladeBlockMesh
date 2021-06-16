@@ -1,15 +1,15 @@
 # ==================================================
 # Importing libraries
 # ==================================================
-import os, sys
+import os
 # ==================================================
 # Importing Functions
 # ==================================================
 from BlockMeshFunc import GetLastVert
 # ==================================================
-# Importing Classes
+# Importing BlockMesh
 # ==================================================
-from CreateBlockMeshDict import BlockMesh
+from Codes.BlockMesh.BlockMesh import BlockMesh
 from Airfoil import Airfoil
 from Cover import Cover
 from Blade import Blade
@@ -39,7 +39,7 @@ hubEdges = []
 hubBoundaries = []
 # ==================================================
 # Calculating number of airfoils and hub connections
-for file in os.listdir(os.path.abspath('../Coordinates')):
+for file in os.listdir(os.path.abspath('../../Coordinates')):
     if file.startswith('hub'):
         numberOfHubAirfoils += 1
     elif file.startswith('airfoil'):
