@@ -27,6 +27,10 @@ blockMesh = BlockMesh()
 # =============================================================================
 number_of_hub_airfoils = 0
 number_of_airfoils = 0
+
+verts = []
+hexes = []
+edges = []
 # =============================================================================
 # Calculating number of airfoils and hub connections
 for file in os.listdir(os.path.abspath('../Coordinates')):
@@ -38,10 +42,24 @@ for file in os.listdir(os.path.abspath('../Coordinates')):
 airfoil1 = Airfoil(5)
 airfoil2 = Airfoil(6)
 airfoil3 = Airfoil(7)
-hex1 = Hex(airfoil1, airfoil2)
-hex1 = Hex(airfoil2, airfoil3)
 
-BlockMesh.add_to_verts(Vertices.export_coord())
+hex1 = Hex(airfoil1, airfoil2)
+hex2 = Hex(airfoil2, airfoil3)
+
+verts.extend(airfoil1.get_verts())
+verts.extend(airfoil2.get_verts())
+verts.extend(airfoil3.get_verts())
+
+edges.extend(airfoil1.get_spline())
+edges.extend(airfoil2.get_spline())
+edges.extend(airfoil3.get_spline())
+
+hexes.extend(hex1.get_hex())
+hexes.extend(hex2.get_hex())
+
+BlockMesh.add_to_verts(verts)
+BlockMesh.add_to_hex(hexes)
+BlockMesh.add_to_edges(edges)
 BlockMesh.create_blockmeshdict()
 # =============================================================================
 print("Done")

@@ -6,31 +6,22 @@ class BlockMesh:
     hex = []
     edges = []
     boundaries = []
-    vertCount = 0
 
     @staticmethod
     def add_to_verts(target):
-        for line in target:
-            line = list(line)
-            for i in range(len(line)):
-                line[i] = round(line[i], 4)
-            BlockMesh.verts.append(f"\n\t({line[0]}   \t{line[1]}   \t{line[2]})\t\t//{BlockMesh.vertCount}")
-            BlockMesh.vertCount += 1
+        BlockMesh.verts.extend(target)
 
     @staticmethod
     def add_to_hex(target):
-        for line in target:
-            BlockMesh.hex.append(line)
+        BlockMesh.hex.extend(target)
 
     @staticmethod
     def add_to_edges(target):
-        for line in target:
-            BlockMesh.edges.append(line)
+        BlockMesh.edges.extend(target)
 
     @staticmethod
     def add_to_boundaries(target):
-        for line in target:
-            BlockMesh.boundaries.append(line)
+        BlockMesh.boundaries.extend(target)
 
     @staticmethod
     def create_blockmeshdict():

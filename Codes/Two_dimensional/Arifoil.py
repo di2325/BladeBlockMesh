@@ -1,6 +1,4 @@
-from Codes.Two_dimensional.Splines import airfoil_splines, create_spline
 from Codes.Two_dimensional.Vertices import Vertices
-from Codes.BlockMesh.BlockMesh import BlockMesh
 
 # Real value divided by 2:
 SHELL_WIDTH = 3
@@ -16,32 +14,37 @@ SHELL_HEIGHT = 2.5
 
 class Airfoil(Vertices):
     def __init__(self, i):
+        self.verts = []
         self.verts_id = []
-        self.shell = []
-        splines = airfoil_splines(i)
-        self.verts = splines["verts"]
-        self.top = splines["top"]
-        self.left = splines["left"]
-        self.right = splines["right"]
-        self.bot = splines["bot"]
-        self.verts_id.extend(self.add_vert(self.verts))
+        self.top = []
+        self.left = []
+        self.right = []
+        self.bot = []
+        self.get_airfoil_data(i)
         self.create_shell()
-        self.create_spline()
 
     def create_shell(self):
         center = [(self.verts[0][0] + self.verts[1][0] + self.verts[2][0] + self.verts[3][0]) / 4,
                   (self.verts[0][1] + self.verts[1][1] + self.verts[2][1] + self.verts[3][1]) / 4,
                   (self.verts[0][2] + self.verts[1][2] + self.verts[2][2] + self.verts[3][2]) / 4]
 
-        self.shell = [[center[0] - SHELL_WIDTH, center[1] + SHELL_HEIGHT, center[2]],
-                      [center[0] - SHELL_WIDTH, center[1] - SHELL_HEIGHT, center[2]],
-                      [center[0] + SHELL_WIDTH, center[1] - SHELL_HEIGHT, center[2]],
-                      [center[0] + SHELL_WIDTH, center[1] + SHELL_HEIGHT, center[2]]]
+        shell = [[center[0] - SHELL_WIDTH, center[1] + SHELL_HEIGHT, center[2]],
+                 [center[0] - SHELL_WIDTH, center[1] - SHELL_HEIGHT, center[2]],
+                 [center[0] + SHELL_WIDTH, center[1] - SHELL_HEIGHT, center[2]],
+                 [center[0] + SHELL_WIDTH, center[1] + SHELL_HEIGHT, center[2]]]
 
-        self.verts_id.extend(self.add_vert(self.shell))
+        self.save_verts(shell)
 
-    def create_spline(self):
-        BlockMesh.add_to_edges(create_spline(self.verts_id[1], self.verts_id[0], self.right))
-        BlockMesh.add_to_edges(create_spline(self.verts_id[0], self.verts_id[3], self.top))
-        BlockMesh.add_to_edges(create_spline(self.verts_id[3], self.verts_id[2], self.left))
-        BlockMesh.add_to_edges(create_spline(self.verts_id[2], self.verts_id[1], self.bot))
+    def get_verts(self):
+        output = []
+        for i in range(len(self.verts)):
+            output.append(f"\n\t({round(self.verts[i][0], 4)}   \t{round(self.verts[i][1], 4)}   "
+                          f"\t{round(self.verts[i][2], 4)})\t\t//{self.verts_id[i]}")
+        return output
+
+    def get_spline(self):
+        output = self.b_spline(self.verts_id[1], self.verts_id[0], self.right)
+        output.extend(self.b_spline(self.verts_id[0], self.verts_id[3], self.top))
+        output.extend(self.b_spline(self.verts_id[3], self.verts_id[2], self.left))
+        output.extend(self.b_spline(self.verts_id[2], self.verts_id[1], self.bot))
+        return output
