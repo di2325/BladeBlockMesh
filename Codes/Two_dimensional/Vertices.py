@@ -1,7 +1,35 @@
+"""
+Parent static class Vertices:
+    Contains methods for vertices and spline manipulations
+
+    Attributes:
+        verts               stores all vertices in the ready for BlockMesh form
+
+        vert_count          counts how many vertices were created. Required for giving vertices ID
+
+    Methods:
+        get_airfoil_data    extracts coordinates from airfoil files.
+                            saves top, bot, left, and right splines to an instance of a child class.
+                            saves top_left, bot_left, bot_right, and top_right vertices to an instance of a child class.
+
+        save_verts          takes a list of vertices and adds them to self.verts of an instance of a child class,
+                            adds new IDs to self.verts_id of an instance of a child class,
+                            saves vertices to Vertices.verts, and increments Vertices.vert_count
+
+        get_verts           exports all vertices to the BlockMesh
+
+        get_splines         exports all splines from self.b_splines and self.arc_splines of an instance
+                            of a child class in the ready for BlockMesh form,
+                            using static methods b_spline() and arc_spline()
+
+        b_spline,           static methods, which take IDs of points and splines
+        arc_spline          convert them to the ready for BlockMesh form
+"""
 import os
 
 
 class Vertices:
+    verts = []
     vert_count = 0
 
     def get_airfoil_data(self, airfoil_number):
@@ -125,13 +153,31 @@ class Vertices:
             if line[0] > bot_left[0]:
                 self.left.append(line)
 
+        # Saves vertices to verts and IDs to verts_id
         verts = [top_right, bot_right, bot_left, top_left]
         Vertices.save_verts(self, verts)
 
     def save_verts(self, verts):
         self.verts.extend(verts)
+        Vertices.verts.extend(Vertices.get_verts(verts))
         self.verts_id.extend(list(range(Vertices.vert_count, Vertices.vert_count + len(verts))))
         Vertices.vert_count += len(verts)
+
+    @staticmethod
+    def get_verts(verts):
+        output = []
+        for i in range(len(verts)):
+            output.append(f"\n\t({round(verts[i][0], 4)}   \t{round(verts[i][1], 4)}   "
+                          f"\t{round(verts[i][2], 4)})\t\t//{Vertices.vert_count + i}")
+        return output
+
+    def get_splines(self):
+        output = []
+        for spline in self.b_splines:
+            output.extend(Vertices.b_spline(spline[0], spline[1], spline[2]))
+        for spline in self.arc_splines:
+            output.extend(Vertices.arc_spline(spline[0], spline[1], spline[2]))
+        return output
 
     @staticmethod
     def b_spline(v1, v2, verts):
