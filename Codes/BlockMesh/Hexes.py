@@ -1,16 +1,10 @@
 """
-Class Hexes:
-    Contains 3D information (blocks), gained from two profiles
+class Boundaries:
+    hexes                   List of all boundaries
 
-    Attributes:
-        self.blocks1,               stores block information of each profile
-        self.blocks2
+    set_hexes()             Takes profiles and converts them to the correct form
 
-        self.bound1,                stores boundaries of each profile
-        self.bound2
-
-    Methods:
-        self.get_hex                exports IDs of vertices in the ready for BlockMesh from
+    get_hexes()             Exports boundaries in the correct form
 """
 
 
@@ -18,15 +12,16 @@ class Hexes:
     hexes = []
 
     @staticmethod
-    def set_hexes(profile1, profile2):
-        block1 = profile1.blocks
-        block2 = profile2.blocks
-        for i in range(len(block1)):
-            Hexes.hexes.append(
-                (f"\n\thex ({block1[i][0]} {block1[i][1]} {block1[i][2]} {block1[i][3]} "
-                 f"{block2[i][0]} {block2[i][1]} {block2[i][2]} {block2[i][3]}) rotatingZone "
-                 f"({10} {10} {10}) simpleGrading "
-                 f"({1} {1} {1})"))
+    def set_hexes(profile1, profile2, block, cells=(10, 10, 10), grading=(1, 1, 1)):
+        hex1 = [profile1.verts_id[block[0]], profile1.verts_id[block[1]],
+                profile1.verts_id[block[2]], profile1.verts_id[block[3]]]
+        hex2 = [profile2.verts_id[block[0]], profile2.verts_id[block[1]],
+                profile2.verts_id[block[2]], profile2.verts_id[block[3]]]
+        Hexes.hexes.append(
+                (f"\n\thex ({hex1[0]} {hex1[1]} {hex1[2]} {hex1[3]} "
+                 f"{hex2[0]} {hex2[1]} {hex2[2]} {hex2[3]}) rotatingZone "
+                 f"({cells[0]} {cells[1]} {cells[2]}) simpleGrading "
+                 f"({grading[0]} {grading[1]} {grading[2]})"))
 
     @staticmethod
     def get_hexes():

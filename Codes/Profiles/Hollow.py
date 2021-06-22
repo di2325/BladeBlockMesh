@@ -1,6 +1,6 @@
 """
+class Hollow (profile):
 """
-from Codes.BlockMesh.Vertices import Vertices
 
 # Real value divided by 2:
 SHELL_WIDTH = 3
@@ -14,7 +14,7 @@ SHELL_HEIGHT = 3
 # 6-----------5
 
 
-class Hollow(Vertices):
+class Hollow:
     def __init__(self, i):
         # Initialise variables
         self.verts = []

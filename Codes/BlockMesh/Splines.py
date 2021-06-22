@@ -1,3 +1,18 @@
+"""
+class Splines:
+    splines                     List of all boundaries
+
+    set_splines()               Takes profile, extracts b_splines and arc_splines from it,
+                                saves them in to the correct form
+
+    b_spline()                  Converts b_splines in to the correct form
+
+    arc_spline()                Converts arc_splines in to the correct form
+
+    get_splines()               Exports splines in the correct form
+"""
+
+
 class Splines:
     splines = []
 
