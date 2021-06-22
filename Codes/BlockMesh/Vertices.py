@@ -1,14 +1,14 @@
 """
 class Vertices:
-    verts                   List of all boundaries
+    verts                   global list of all vertices
 
-    vert_count              Amount of vertices
+    vert_count              quantity of created vertices
 
-    set_verts()             Takes vertices, saves them to local list of verts,
+    set_verts()             takes vertices, saves them to local list of verts,
                             fills local list of verts_id,
                             saves vertices to the global verts list in the correct form
 
-    get_verts()             Exports vertices from the global verts list
+    get_verts()             exports vertices from the global list of vertices
 """
 
 

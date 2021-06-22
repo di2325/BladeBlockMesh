@@ -22,7 +22,7 @@ Main code:
 """
 # ==================================================================================================================== #
 # Importing libraries and classes
-from Codes.Math.VerticesManipulation import *
+from Codes.Math.Transformation_of_vertices import *
 
 from Codes.BlockMesh.BlockMesh import BlockMesh
 from Codes.BlockMesh.Vertices import Vertices
@@ -30,8 +30,7 @@ from Codes.BlockMesh.Hexes import Hexes
 from Codes.BlockMesh.Splines import Splines
 from Codes.BlockMesh.Boundaries import Boundaries
 
-from Codes.Profiles.Arifoil import Airfoil
-from Codes.Profiles.Hollow import Hollow
+from Codes.Profiles.Profile import Profile
 
 # Constant variables
 NUMBER_OF_BLADES = 3
@@ -52,62 +51,52 @@ for file in os.listdir(os.path.abspath('../Coordinates')):
 # --2------1--
 # 6-----------5
 
+# List of all blade profiles
 profiles = []
 for i in range(number_of_airfoils-1):
-    profiles.append(Airfoil())
+    # Create Profile class
+    profiles.append(Profile())
+    # Extract coordinates and splines
     verts, splines = get_airfoil_data(i)
+    # Calculate z position of a profile
     z = (verts[0][2] + verts[1][2] + verts[2][2] + verts[3][2]) / 4
+    # Calculate coordinates of a square shell and add them to the rest of coordinates
     verts.extend(create_square(HUB_LENGTH, z))
+    # Add vertices to the global and local lists
     Vertices.set_verts(profiles[i], verts)
+    # Create splines in the local lists
     profiles[i].set_b_splines(0, 3, splines[0])
     profiles[i].set_b_splines(3, 2, splines[1])
     profiles[i].set_b_splines(2, 1, splines[2])
     profiles[i].set_b_splines(1, 0, splines[3])
+    # Send splines to the global list
     Splines.set_splines(profiles[i])
 
-profiles.append(Airfoil())
+# Create blade tip profile at length of 65
+profiles.append(Profile())
 verts = create_square(1, 65)
 verts.extend(create_square(HUB_LENGTH, 65))
 Vertices.set_verts(profiles[-1], verts)
 
 for i in range(number_of_airfoils-2):
+    # Create hexes and store them at the global list
     Hexes.set_hexes(profiles[i], profiles[i+1], [0, 3, 7, 4], [15, 10, 10])
     Hexes.set_hexes(profiles[i], profiles[i+1], [3, 2, 6, 7], [10, 10, 10])
     Hexes.set_hexes(profiles[i], profiles[i+1], [2, 1, 5, 6], [15, 10, 10])
     Hexes.set_hexes(profiles[i], profiles[i+1], [1, 0, 4, 5], [10, 10, 10])
-
+    # Create boundaries and store them at the global list
     Boundaries.set_boundaries("blade", profiles[i], [0, 3], profiles[i+1], [3, 0])
     Boundaries.set_boundaries("blade", profiles[i], [3, 2], profiles[i+1], [2, 3])
     Boundaries.set_boundaries("blade", profiles[i], [2, 1], profiles[i+1], [1, 2])
     Boundaries.set_boundaries("blade", profiles[i], [1, 0], profiles[i+1], [0, 1])
 
-    Boundaries.set_boundaries("inlet", profiles[i], [4, 5], profiles[i + 1], [5, 4])
-    Boundaries.set_boundaries("outlet", profiles[i], [6, 7], profiles[i + 1], [7, 6])
-    Boundaries.set_boundaries("wall", profiles[i], [7, 4], profiles[i + 1], [4, 7])
-    Boundaries.set_boundaries("wall", profiles[i], [5, 6], profiles[i + 1], [6, 5])
-
+# Creating tip hexes and boundaries
 Hexes.set_hexes(profiles[-2], profiles[-1], [0, 3, 7, 4], [15, 10, 10])
 Hexes.set_hexes(profiles[-2], profiles[-1], [3, 2, 6, 7], [10, 10, 10])
 Hexes.set_hexes(profiles[-2], profiles[-1], [2, 1, 5, 6], [15, 10, 10])
 Hexes.set_hexes(profiles[-2], profiles[-1], [1, 0, 4, 5], [10, 10, 10])
 Hexes.set_hexes(profiles[-2], profiles[-1], [0, 1, 2, 3], [10, 15, 10])
 Boundaries.set_boundaries("blade", profiles[-2], [3, 2, 1, 0])
-
-Boundaries.set_boundaries("inlet", profiles[-2], [4, 5], profiles[-1], [5, 4])
-Boundaries.set_boundaries("outlet", profiles[-2], [6, 7], profiles[-1], [7, 6])
-Boundaries.set_boundaries("wall", profiles[-2], [7, 4], profiles[-1], [4, 7])
-Boundaries.set_boundaries("wall", profiles[-2], [5, 6], profiles[-1], [6, 5])
-
-Boundaries.set_boundaries("wall", profiles[0], [0, 4, 7, 3])
-Boundaries.set_boundaries("wall", profiles[0], [3, 7, 6, 2])
-Boundaries.set_boundaries("wall", profiles[0], [2, 6, 5, 1])
-Boundaries.set_boundaries("wall", profiles[0], [1, 5, 4, 0])
-
-Boundaries.set_boundaries("wall", profiles[-1], [3, 7, 4, 0])
-Boundaries.set_boundaries("wall", profiles[-1], [2, 6, 7, 3])
-Boundaries.set_boundaries("wall", profiles[-1], [1, 5, 6, 2])
-Boundaries.set_boundaries("wall", profiles[-1], [0, 4, 5, 1])
-Boundaries.set_boundaries("wall", profiles[-1], [0, 1, 2, 3])
 
 # Export everything to the blockMesh
 BlockMesh.add_to_verts(Vertices.get_verts())

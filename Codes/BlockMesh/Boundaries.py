@@ -1,11 +1,11 @@
 """
 class Boundaries:
-    boundaries              Library of all boundaries
+    boundaries              global library of all boundaries
 
-    set_boundaries()        Takes boundary name, profiles, and verts
+    set_boundaries()        takes boundary name, profiles, verts and
                             assigns them to correct boundary
 
-    get_boundaries()        Exports boundaries in the correct form
+    get_boundaries()        exports boundaries in the correct form from the global library
 """
 
 

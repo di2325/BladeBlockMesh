@@ -1,10 +1,10 @@
 """
-class Boundaries:
-    hexes                   List of all boundaries
+class Hexes:
+    hexes                   global list of all hexes
 
-    set_hexes()             Takes profiles and converts them to the correct form
+    set_hexes()             takes profiles and converts them to the correct form
 
-    get_hexes()             Exports boundaries in the correct form
+    get_hexes()             exports boundaries in the correct form from the global list of hexes
 """
 
 

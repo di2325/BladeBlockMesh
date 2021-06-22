@@ -1,15 +1,15 @@
 """
 class Splines:
-    splines                     List of all boundaries
+    splines                     global list of all splines
 
-    set_splines()               Takes profile, extracts b_splines and arc_splines from it,
-                                saves them in to the correct form
+    set_splines()               extracts b_splines and arc_splines from a local lists and
+                                saves them in to the correct form to the global list
 
-    b_spline()                  Converts b_splines in to the correct form
+    b_spline()                  converts b_splines to the correct form
 
-    arc_spline()                Converts arc_splines in to the correct form
+    arc_spline()                converts arc_splines to the correct form
 
-    get_splines()               Exports splines in the correct form
+    get_splines()               exports splines in the correct form from the global list of splines
 """
 
 

@@ -1,3 +1,10 @@
+"""
+This file contains functions for various manipulations with vertices
+
+    get_airfoil_data            returns vertices and splines from airfoil files
+
+    create_square               returns four coordinates from z position and length of a side
+"""
 import os
 
 
