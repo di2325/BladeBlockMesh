@@ -10,7 +10,7 @@ class Boundaries:
     def assign_boundaries(boundary, profile1, verts1, profile2=None, verts2=None):
         if boundary not in Boundaries.boundaries:
             Boundaries.boundaries[boundary] = []
-        if profile2 != None:
+        if profile2:
             for i in range(len(verts1)):
                 Boundaries.boundaries[boundary].append([profile1.verts_id[verts1[i][0]],
                                                         profile1.verts_id[verts1[i][1]],

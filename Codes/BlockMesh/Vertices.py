@@ -155,39 +155,16 @@ class Vertices:
 
         # Saves vertices to verts and IDs to verts_id
         verts = [top_right, bot_right, bot_left, top_left]
-        Vertices.save_verts(self, verts)
+        Vertices.set_verts(self, verts)
 
-    def save_verts(self, verts):
+    def set_verts(self, verts):
         self.verts.extend(verts)
-        Vertices.verts.extend(Vertices.get_verts(verts))
         self.verts_id.extend(list(range(Vertices.vert_count, Vertices.vert_count + len(verts))))
-        Vertices.vert_count += len(verts)
-
-    @staticmethod
-    def get_verts(verts):
-        output = []
-        for i in range(len(verts)):
-            output.append(f"\n\t({round(verts[i][0], 4)}   \t{round(verts[i][1], 4)}   "
-                          f"\t{round(verts[i][2], 4)})\t\t//{Vertices.vert_count + i}")
-        return output
-
-    def get_splines(self):
-        output = []
-        for spline in self.b_splines:
-            output.extend(Vertices.b_spline(spline[0], spline[1], spline[2]))
-        for spline in self.arc_splines:
-            output.extend(Vertices.arc_spline(spline[0], spline[1], spline[2]))
-        return output
-
-    @staticmethod
-    def b_spline(v1, v2, verts):
-        output = [f"\n\tBSpline {v1} {v2}",
-                  "\n\t("]
         for vert in verts:
-            output.append(f"\n\t\t({vert[0]} {vert[1]} {vert[2]})")
-        output.append("\n\t)")
-        return output
+            Vertices.verts.append(f"\n\t({round(vert[0], 4)}   \t{round(vert[1], 4)}   "
+                          f"\t{round(vert[2], 4)})\t\t//{Vertices.vert_count}")
+            Vertices.vert_count += 1
 
     @staticmethod
-    def arc_spline(v1, v2, vert):
-        return f"\narc {v1} {v2} ({vert[0]} {vert[1]} {vert[2]})"
+    def get_verts():
+        return Vertices.verts
