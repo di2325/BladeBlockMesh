@@ -28,6 +28,8 @@ import os
 from Codes.BlockMesh.BlockMesh import BlockMesh
 from Codes.Two_dimensional.Vertices import Vertices
 from Codes.Two_dimensional.Arifoil import Airfoil
+from Codes.Two_dimensional.Hollow import Hollow
+from Codes.Two_dimensional.Boundaries import Boundaries
 from Codes.Three_dimensional.Hex import Hex
 
 # Constant variables
@@ -53,11 +55,24 @@ edges = []
 # ==================================================================================================================== #
 
 # Generating 2D and 3D classes
-for i in range(number_of_airfoils):
-    profiles[i] = Airfoil(i)
-
 for i in range(number_of_airfoils - 1):
+    profiles[i] = Airfoil(i)
+i += 1
+profiles[i] = Hollow(i)
+
+for i in range(number_of_airfoils - 2):
+    # Create hex
     blocks[i] = Hex(profiles[i], profiles[i + 1])
+    # Assign blade boundaries
+    Boundaries.assign_boundaries("blade", profiles[i], [[0, 3], [3, 2], [2, 1], [1, 0]],
+                                 profiles[i + 1], [[3, 0], [2, 3], [1, 2], [0, 1]])
+
+# Create tip hex
+i += 1
+blocks[i] = Hex(profiles[i], profiles[i + 1])
+
+# Assign tip blade boundaries
+Boundaries.assign_boundaries("blade", profiles[i], [[0, 3, 2, 1]])
 
 # Getting vertices and edges from 2D classes, and hexes from 3D classes
 for profile in profiles:
@@ -69,7 +84,7 @@ for block in blocks:
 BlockMesh.add_to_verts(Vertices.verts)
 BlockMesh.add_to_hex(hexes)
 BlockMesh.add_to_edges(edges)
-BlockMesh.add_to_boundaries(Hex.get_boundaries())
+BlockMesh.add_to_boundaries(Boundaries.get_boundaries())
 BlockMesh.create_blockmeshdict()
 
 # ==================================================================================================================== #
