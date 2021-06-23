@@ -17,6 +17,10 @@ def ACos(cos):
     return math.degrees(math.acos(cos))
 
 
+def square_rad(c):
+    return c / math.sqrt(2)
+
+
 def triangle_rad(a, b):
     return math.sqrt((a ** 2) + (b ** 2))
 
