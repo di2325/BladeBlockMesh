@@ -21,10 +21,18 @@ Main code:
         * Create blockMeshDict file
 
     # Airfoil structure:
-    # 7----------4
+    # 7-----------4
     # --3------0--
     # --2------1--
     # 6-----------5
+
+    # Filler structure:
+    # 3-----0
+    # 2-----1
+
+    # Back and Front structure:
+    # 0-----1
+    # 3-----2
 """
 # ==================================================================================================================== #
 # Importing libraries and classes
@@ -49,6 +57,14 @@ TIP_LENGTH = 65
 BLADE_TIP_RAD = triangle_rad(HUB_LENGTH / 2, TIP_LENGTH)
 RADS = [HUB_RAD, 5.5, 8.2, 11.7, 15.6, 20.0, 24.1, 28.0, 32.4,
         36.2, 40.4, 44.5, 48.6, 52.5, 56, 59.0, 61.6, BLADE_TIP_RAD]
+
+MESH_BLADE_TOP = 15
+MESH_BLADE_SIDE = 10
+MESH_RADIUS = 5
+MESH_YPLUS_MAIN = 16
+MESH_YPLUS = 13
+MESH_BACK_LENGTH = 11
+MESH_FRONT_LENGTH = 21
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
@@ -107,10 +123,10 @@ Splines.set_splines(profiles[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles[i], profiles[i + 1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i + 1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i + 1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i + 1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_RADIUS])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_RADIUS])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_RADIUS])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_RADIUS])
     # Create boundaries and store them at the global list
     Boundaries.set_boundaries("blade", profiles[i], [0, 3], profiles[i + 1], [3, 0])
     Boundaries.set_boundaries("blade", profiles[i], [3, 2], profiles[i + 1], [2, 3])
@@ -118,11 +134,11 @@ for i in range(number_of_airfoils - 2):
     Boundaries.set_boundaries("blade", profiles[i], [1, 0], profiles[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
-Hexes.set_hexes(profiles[-2], profiles[-1], [0, 3, 7, 4], [15, 10, 10])
-Hexes.set_hexes(profiles[-2], profiles[-1], [3, 2, 6, 7], [10, 10, 10])
-Hexes.set_hexes(profiles[-2], profiles[-1], [2, 1, 5, 6], [15, 10, 10])
-Hexes.set_hexes(profiles[-2], profiles[-1], [1, 0, 4, 5], [10, 10, 10])
-Hexes.set_hexes(profiles[-2], profiles[-1], [0, 1, 2, 3], [10, 15, 10])
+Hexes.set_hexes(profiles[-2], profiles[-1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_RADIUS])
+Hexes.set_hexes(profiles[-2], profiles[-1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_RADIUS])
+Hexes.set_hexes(profiles[-2], profiles[-1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_RADIUS])
+Hexes.set_hexes(profiles[-2], profiles[-1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_RADIUS])
+Hexes.set_hexes(profiles[-2], profiles[-1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 Boundaries.set_boundaries("blade", profiles[-2], [3, 2, 1, 0])
 Boundaries.set_boundaries("hub", profiles[0], [0, 4, 7, 3])
 Boundaries.set_boundaries("hub", profiles[0], [3, 7, 6, 2])
@@ -181,10 +197,10 @@ Splines.set_splines(profiles_left[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
     # Create boundaries and store them at the global list
     Boundaries.set_boundaries("blade", profiles_left[i], [0, 3], profiles_left[i + 1], [3, 0])
     Boundaries.set_boundaries("blade", profiles_left[i], [3, 2], profiles_left[i + 1], [2, 3])
@@ -192,11 +208,11 @@ for i in range(number_of_airfoils - 2):
     Boundaries.set_boundaries("blade", profiles_left[i], [1, 0], profiles_left[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
-Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [0, 3, 7, 4], [15, 10, 10])
-Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [3, 2, 6, 7], [10, 10, 10])
-Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [2, 1, 5, 6], [15, 10, 10])
-Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [1, 0, 4, 5], [10, 10, 10])
-Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [0, 1, 2, 3], [10, 15, 10])
+Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 Boundaries.set_boundaries("blade", profiles_left[-2], [3, 2, 1, 0])
 Boundaries.set_boundaries("hub", profiles_left[0], [0, 4, 7, 3])
 Boundaries.set_boundaries("hub", profiles_left[0], [3, 7, 6, 2])
@@ -255,10 +271,10 @@ Splines.set_splines(profiles_right[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
     # Create boundaries and store them at the global list
     Boundaries.set_boundaries("blade", profiles_right[i], [0, 3], profiles_right[i + 1], [3, 0])
     Boundaries.set_boundaries("blade", profiles_right[i], [3, 2], profiles_right[i + 1], [2, 3])
@@ -266,11 +282,11 @@ for i in range(number_of_airfoils - 2):
     Boundaries.set_boundaries("blade", profiles_right[i], [1, 0], profiles_right[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
-Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [0, 3, 7, 4], [15, 10, 10])
-Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [3, 2, 6, 7], [10, 10, 10])
-Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [2, 1, 5, 6], [15, 10, 10])
-Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [1, 0, 4, 5], [10, 10, 10])
-Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [0, 1, 2, 3], [10, 15, 10])
+Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS, MESH_RADIUS])
+Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 Boundaries.set_boundaries("blade", profiles_right[-2], [3, 2, 1, 0])
 Boundaries.set_boundaries("hub", profiles_right[0], [0, 4, 7, 3])
 Boundaries.set_boundaries("hub", profiles_right[0], [3, 7, 6, 2])
@@ -294,7 +310,8 @@ for i in range(number_of_airfoils):
 Boundaries.set_boundaries("hub", fillers_right[0], [3, 2, 1, 0])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(fillers_right[i], fillers_right[i + 1], [0, 1, 2, 3], [10, 20, 10])
+    Hexes.set_hexes(fillers_right[i], fillers_right[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Left fillers
@@ -312,7 +329,7 @@ for i in range(number_of_airfoils):
 Boundaries.set_boundaries("hub", fillers_left[0], [3, 2, 1, 0])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(fillers_left[i], fillers_left[i + 1], [0, 1, 2, 3], [10, 20, 10])
+    Hexes.set_hexes(fillers_left[i], fillers_left[i + 1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Bot fillers
@@ -330,17 +347,17 @@ for i in range(number_of_airfoils):
 Boundaries.set_boundaries("hub", fillers_bot[0], [3, 2, 1, 0])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(fillers_bot[i], fillers_bot[i + 1], [0, 1, 2, 3], [10, 20, 10])
+    Hexes.set_hexes(fillers_bot[i], fillers_bot[i + 1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_RADIUS])
 
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Back
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
-MESH_BACK = 11
 BACK_LENGTH = 15
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # First blade
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
 back_profiles = []
 for i in range(number_of_airfoils):
     back_profiles.append(Profile())
@@ -357,11 +374,13 @@ back_profiles[-1].set_arc_splines(1, 0, [BLADE_TIP_RAD, BACK_LENGTH, 0])
 Splines.set_splines(back_profiles[-1])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(back_profiles[i], back_profiles[i+1], [0, 1, 2, 3], [15, MESH_BACK, 10])
+    Hexes.set_hexes(back_profiles[i], back_profiles[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_RADIUS])
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Left blade
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
 back_profiles_left = []
 for i in range(number_of_airfoils):
     back_profiles_left.append(Profile())
@@ -378,12 +397,13 @@ back_profiles_left[-1].set_arc_splines(0, 1, [BLADE_TIP_RAD, BACK_LENGTH, 0])
 Splines.set_splines(back_profiles_left[-1])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(back_profiles_left[i], back_profiles_left[i + 1], [0, 1, 2, 3], [15, MESH_BACK, 10])
-
+    Hexes.set_hexes(back_profiles_left[i], back_profiles_left[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_RADIUS])
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Right blade
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
 back_profiles_right = []
 for i in range(number_of_airfoils):
     back_profiles_right.append(Profile())
@@ -400,7 +420,220 @@ back_profiles_right[-1].set_arc_splines(1, 0, [0, BACK_LENGTH, BLADE_TIP_RAD])
 Splines.set_splines(back_profiles_right[-1])
 
 for i in range(number_of_airfoils - 1):
-    Hexes.set_hexes(back_profiles_right[i], back_profiles_right[i+1], [0, 1, 2, 3], [15, MESH_BACK, 10])
+    Hexes.set_hexes(back_profiles_right[i], back_profiles_right[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Right fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+back_fillers_right = []
+for i in range(number_of_airfoils):
+    back_fillers_right.append(Profile())
+    back_fillers_right[i].verts_id = [back_profiles_right[i].verts_id[0], back_profiles_right[i].verts_id[3],
+                                      back_profiles[i].verts_id[2], back_profiles[i].verts_id[1]]
+    back_fillers_right[i].set_arc_splines(0, 3, [0, BACK_LENGTH, RADS[i]])
+    Splines.set_splines(back_fillers_right[i])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(back_fillers_right[i], back_fillers_right[i + 1], [0, 1, 2, 3],
+                    [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Left fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+back_fillers_left = []
+for i in range(number_of_airfoils):
+    back_fillers_left.append(Profile())
+    back_fillers_left[i].verts_id = [back_profiles[i].verts_id[0], back_profiles[i].verts_id[3],
+                                     back_profiles_left[i].verts_id[2], back_profiles_left[i].verts_id[1]]
+    back_fillers_left[i].set_arc_splines(3, 0, [0, BACK_LENGTH, RADS[i]])
+    Splines.set_splines(back_fillers_left[i])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(back_fillers_left[i], back_fillers_left[i + 1], [0, 1, 2, 3],
+                    [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Bot fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+back_fillers_bot = []
+for i in range(number_of_airfoils):
+    back_fillers_bot.append(Profile())
+    back_fillers_bot[i].verts_id = [back_profiles_left[i].verts_id[0], back_profiles_left[i].verts_id[3],
+                                    back_profiles_right[i].verts_id[2], back_profiles_right[i].verts_id[1]]
+    back_fillers_bot[i].set_arc_splines(3, 0, [RADS[i], BACK_LENGTH, 0])
+    Splines.set_splines(back_fillers_bot[i])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(back_fillers_bot[i], back_fillers_bot[i + 1], [0, 1, 2, 3],
+                    [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Center fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+hub_profile = Profile()
+hub_profile.verts_id = [back_profiles_left[0].verts_id[1],
+                        back_profiles_right[0].verts_id[0],
+                        back_profiles_right[0].verts_id[3],
+                        back_profiles_left[0].verts_id[2]]
+
+hub_profile_2 = Profile()
+hub_profile_2.verts_id = [back_profiles_left[0].verts_id[0],
+                          back_profiles_right[0].verts_id[1],
+                          back_profiles_right[0].verts_id[2],
+                          back_profiles_left[0].verts_id[3]]
+
+Hexes.set_hexes(hub_profile, back_profiles[0], [0, 1, 2, 3], [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_BLADE_TOP])
+Hexes.set_hexes(hub_profile_2, hub_profile, [0, 1, 2, 3], [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_BLADE_TOP])
+Boundaries.set_boundaries("hub", hub_profile, [2, 3], back_profiles[0], [3, 2])
+Boundaries.set_boundaries("hub", hub_profile_2, [2, 3], hub_profile, [3, 2])
+
+# ==================================================================================================================== #
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Front
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+FRONT_LENGTH = 15
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# First blade
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+front_profiles = []
+for i in range(number_of_airfoils):
+    front_profiles.append(Profile())
+    ref_verts = profiles[i].verts
+    ref_ids = profiles[i].verts_id
+    front_profiles[i].verts_id.extend([ref_ids[6], ref_ids[5]])
+    verts = [[ref_verts[5][0], -FRONT_LENGTH, ref_verts[5][2]],
+             [ref_verts[6][0], -FRONT_LENGTH, ref_verts[6][2]]]
+    Vertices.set_verts(front_profiles[i], verts)
+
+front_profiles[0].set_arc_splines(2, 3, [HUB_RAD, -FRONT_LENGTH, 0])
+Splines.set_splines(front_profiles[0])
+front_profiles[-1].set_arc_splines(2, 3, [BLADE_TIP_RAD, -FRONT_LENGTH, 0])
+Splines.set_splines(front_profiles[-1])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(front_profiles[i], front_profiles[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_FRONT_LENGTH, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Left blade
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+front_profiles_left = []
+for i in range(number_of_airfoils):
+    front_profiles_left.append(Profile())
+    ref_verts = profiles_left[i].verts
+    ref_ids = profiles_left[i].verts_id
+    front_profiles_left[i].verts_id.extend([ref_ids[6], ref_ids[5]])
+    verts = [[ref_verts[5][0], -FRONT_LENGTH, ref_verts[5][2]],
+             [ref_verts[6][0], -FRONT_LENGTH, ref_verts[6][2]]]
+    Vertices.set_verts(front_profiles_left[i], verts)
+
+front_profiles_left[0].set_arc_splines(3, 2, [HUB_RAD, -FRONT_LENGTH, 0])
+Splines.set_splines(front_profiles_left[0])
+front_profiles_left[-1].set_arc_splines(3, 2, [BLADE_TIP_RAD, -FRONT_LENGTH, 0])
+Splines.set_splines(front_profiles_left[-1])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(front_profiles_left[i], front_profiles_left[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_FRONT_LENGTH, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Right blade
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+front_profiles_right = []
+for i in range(number_of_airfoils):
+    front_profiles_right.append(Profile())
+    ref_verts = profiles_right[i].verts
+    ref_ids = profiles_right[i].verts_id
+    front_profiles_right[i].verts_id.extend([ref_ids[6], ref_ids[5]])
+    verts = [[ref_verts[5][0], -FRONT_LENGTH, ref_verts[5][2]],
+             [ref_verts[6][0], -FRONT_LENGTH, ref_verts[6][2]]]
+    Vertices.set_verts(front_profiles_right[i], verts)
+
+front_profiles_right[0].set_arc_splines(2, 3, [0, -FRONT_LENGTH, HUB_RAD])
+Splines.set_splines(front_profiles_right[0])
+front_profiles_right[-1].set_arc_splines(2, 3, [0, -FRONT_LENGTH, BLADE_TIP_RAD])
+Splines.set_splines(front_profiles_right[-1])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(front_profiles_right[i], front_profiles_right[i + 1], [0, 1, 2, 3],
+                    [MESH_BLADE_TOP, MESH_FRONT_LENGTH, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Right fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+# back_fillers_right = []
+# for i in range(number_of_airfoils):
+#     back_fillers_right.append(Profile())
+#     back_fillers_right[i].verts_id = [back_profiles_right[i].verts_id[0], back_profiles_right[i].verts_id[3],
+#                                       back_profiles[i].verts_id[2], back_profiles[i].verts_id[1]]
+#     back_fillers_right[i].set_arc_splines(0, 3, [0, BACK_LENGTH, RADS[i]])
+#     Splines.set_splines(back_fillers_right[i])
+#
+# for i in range(number_of_airfoils - 1):
+#     Hexes.set_hexes(back_fillers_right[i], back_fillers_right[i + 1], [0, 1, 2, 3],
+#                     [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Left fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+# back_fillers_left = []
+# for i in range(number_of_airfoils):
+#     back_fillers_left.append(Profile())
+#     back_fillers_left[i].verts_id = [back_profiles[i].verts_id[0], back_profiles[i].verts_id[3],
+#                                      back_profiles_left[i].verts_id[2], back_profiles_left[i].verts_id[1]]
+#     back_fillers_left[i].set_arc_splines(3, 0, [0, BACK_LENGTH, RADS[i]])
+#     Splines.set_splines(back_fillers_left[i])
+#
+# for i in range(number_of_airfoils - 1):
+#     Hexes.set_hexes(back_fillers_left[i], back_fillers_left[i + 1], [0, 1, 2, 3],
+#                     [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Bot fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+# back_fillers_bot = []
+# for i in range(number_of_airfoils):
+#     back_fillers_bot.append(Profile())
+#     back_fillers_bot[i].verts_id = [back_profiles_left[i].verts_id[0], back_profiles_left[i].verts_id[3],
+#                                     back_profiles_right[i].verts_id[2], back_profiles_right[i].verts_id[1]]
+#     back_fillers_bot[i].set_arc_splines(3, 0, [RADS[i], BACK_LENGTH, 0])
+#     Splines.set_splines(back_fillers_bot[i])
+#
+# for i in range(number_of_airfoils - 1):
+#     Hexes.set_hexes(back_fillers_bot[i], back_fillers_bot[i + 1], [0, 1, 2, 3],
+#                     [MESH_BACK_LENGTH, MESH_BLADE_TOP, MESH_RADIUS])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Center fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+# hub_profile = Profile()
+# hub_profile.verts_id = [back_profiles_left[0].verts_id[1],
+#                         back_profiles_right[0].verts_id[0],
+#                         back_profiles_right[0].verts_id[3],
+#                         back_profiles_left[0].verts_id[2]]
+#
+# hub_profile_2 = Profile()
+# hub_profile_2.verts_id = [back_profiles_left[0].verts_id[0],
+#                           back_profiles_right[0].verts_id[1],
+#                           back_profiles_right[0].verts_id[2],
+#                           back_profiles_left[0].verts_id[3]]
+#
+# Hexes.set_hexes(hub_profile, back_profiles[0], [0, 1, 2, 3], [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_BLADE_TOP])
+# Hexes.set_hexes(hub_profile_2, hub_profile, [0, 1, 2, 3], [MESH_BLADE_TOP, MESH_BACK_LENGTH, MESH_BLADE_TOP])
+# Boundaries.set_boundaries("hub", hub_profile, [2, 3], back_profiles[0], [3, 2])
+# Boundaries.set_boundaries("hub", hub_profile_2, [2, 3], hub_profile, [3, 2])
 
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
