@@ -6,6 +6,7 @@ This file contains functions for various manipulations with vertices
     create_square               returns four coordinates from z position and length of a side
 """
 import os
+from Codes.Math.Custom_Math import *
 
 
 def get_airfoil_data(airfoil_number):
@@ -148,7 +149,29 @@ def get_airfoil_data(airfoil_number):
 
 def create_square(length, z):
     length /= 2
-    return [(-length,  length, z),
+    return [(-length, length, z),
             (-length, -length, z),
-            ( length, -length, z),
-            ( length,  length, z)]
+            (length, -length, z),
+            (length, length, z)]
+
+
+def new_x(x, z, angle):
+    return round(x * Cos(angle) - z * Sin(angle), 4)
+
+
+def new_z(x, z, angle):
+    return round(z * Cos(angle) + x * Sin(angle), 4)
+
+
+def rotate_on_angle(coord, angle):
+    if type(coord[0]) != list and type(coord[0]) != tuple:
+        return (new_x(coord[0], coord[2], angle),
+                coord[1],
+                new_z(coord[0], coord[2], angle))
+    else:
+        output = []
+        for i in range(len(coord)):
+            output.append((new_x(coord[i][0], coord[i][2], angle),
+                           coord[i][1],
+                           new_z(coord[i][0], coord[i][2], angle)))
+        return output
