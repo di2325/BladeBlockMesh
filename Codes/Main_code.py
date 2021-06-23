@@ -77,8 +77,8 @@ profiles[0].set_b_splines(0, 3, splines[0])
 profiles[0].set_b_splines(3, 2, splines[1])
 profiles[0].set_b_splines(2, 1, splines[2])
 profiles[0].set_b_splines(1, 0, splines[3])
-profiles[0].set_arc_splines(4, 7, [HUB_RAD, HUB_LENGTH / 2, 0])
-profiles[0].set_arc_splines(5, 6, [HUB_RAD, -HUB_LENGTH / 2, 0])
+profiles[0].set_arc_splines(4, 7, [RADS[0], HUB_LENGTH / 2, 0])
+profiles[0].set_arc_splines(5, 6, [RADS[0], -HUB_LENGTH / 2, 0])
 # Send splines to the global list
 Splines.set_splines(profiles[0])
 
@@ -100,6 +100,9 @@ profiles.append(Profile())
 verts = create_square(1, TIP_LENGTH)
 verts.extend(create_square(HUB_LENGTH, TIP_LENGTH))
 Vertices.set_verts(profiles[-1], verts)
+profiles[-1].set_arc_splines(4, 7, [RADS[-1], HUB_LENGTH / 2, 0])
+profiles[-1].set_arc_splines(5, 6, [RADS[-1], -HUB_LENGTH / 2, 0])
+Splines.set_splines(profiles[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
@@ -147,8 +150,8 @@ profiles_left[0].set_b_splines(0, 3, b_splines[0])
 profiles_left[0].set_b_splines(3, 2, b_splines[1])
 profiles_left[0].set_b_splines(2, 1, b_splines[2])
 profiles_left[0].set_b_splines(1, 0, b_splines[3])
-profiles_left[0].set_arc_splines(4, 7, arc_splines[0])
-profiles_left[0].set_arc_splines(5, 6, arc_splines[1])
+profiles_left[0].set_arc_splines(7, 4, [RADS[0], HUB_LENGTH / 2, 0])
+profiles_left[0].set_arc_splines(6, 5, [RADS[0], -HUB_LENGTH / 2, 0])
 Splines.set_splines(profiles_left[0])
 
 # Create the rest of profiles
@@ -171,6 +174,9 @@ profiles_left.append(Profile())
 reference = profiles[-1]
 verts = rotate_on_angle(reference.verts, angle)
 Vertices.set_verts(profiles_left[-1], verts)
+profiles_left[-1].set_arc_splines(7, 4, [RADS[-1], HUB_LENGTH / 2, 0])
+profiles_left[-1].set_arc_splines(6, 5, [RADS[-1], -HUB_LENGTH / 2, 0])
+Splines.set_splines(profiles_left[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
@@ -218,8 +224,8 @@ profiles_right[0].set_b_splines(0, 3, b_splines[0])
 profiles_right[0].set_b_splines(3, 2, b_splines[1])
 profiles_right[0].set_b_splines(2, 1, b_splines[2])
 profiles_right[0].set_b_splines(1, 0, b_splines[3])
-profiles_right[0].set_arc_splines(4, 7, arc_splines[0])
-profiles_right[0].set_arc_splines(5, 6, arc_splines[1])
+profiles_right[0].set_arc_splines(4, 7, [0, HUB_LENGTH / 2, RADS[0]])
+profiles_right[0].set_arc_splines(5, 6, [0, -HUB_LENGTH / 2, RADS[0]])
 Splines.set_splines(profiles_right[0])
 
 # Create the rest of profiles
@@ -242,6 +248,9 @@ profiles_right.append(Profile())
 reference = profiles[-1]
 verts = rotate_on_angle(reference.verts, angle)
 Vertices.set_verts(profiles_right[-1], verts)
+profiles_right[-1].set_arc_splines(4, 7, [0, HUB_LENGTH / 2, RADS[-1]])
+profiles_right[-1].set_arc_splines(5, 6, [0, -HUB_LENGTH / 2, RADS[-1]])
+Splines.set_splines(profiles_right[-1])
 
 for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
