@@ -30,6 +30,7 @@ Main code:
 # Importing libraries and classes
 from Codes.Math.Transformation_of_vertices import *
 from Codes.Math.Custom_Math import triangle_side
+from Codes.Math.Custom_Math import triangle_rad
 
 from Codes.BlockMesh.BlockMesh import BlockMesh
 from Codes.BlockMesh.Vertices import Vertices
@@ -44,6 +45,9 @@ NUMBER_OF_BLADES = 3
 HUB_RAD = 4
 HUB_LENGTH = 6
 TIP_LENGTH = 65
+BLADE_TIP_RAD = triangle_rad(HUB_LENGTH / 2, TIP_LENGTH)
+RADS = [HUB_RAD, 5.5, 8.2, 11.7, 15.6, 20.0, 24.1, 28.0, 32.4,
+        36.2, 40.4, 44.5, 48.6, 52.5, 56, 59.0, 61.6, BLADE_TIP_RAD]
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
@@ -73,13 +77,13 @@ profiles[0].set_b_splines(0, 3, splines[0])
 profiles[0].set_b_splines(3, 2, splines[1])
 profiles[0].set_b_splines(2, 1, splines[2])
 profiles[0].set_b_splines(1, 0, splines[3])
-profiles[0].set_arc_splines(4, 7, [4, 3, 0])
-profiles[0].set_arc_splines(5, 6, [4, -3, 0])
+profiles[0].set_arc_splines(4, 7, [HUB_RAD, HUB_LENGTH / 2, 0])
+profiles[0].set_arc_splines(5, 6, [HUB_RAD, -HUB_LENGTH / 2, 0])
 # Send splines to the global list
 Splines.set_splines(profiles[0])
 
 # Create the rest of the profiles
-for i in range(1, number_of_airfoils-1):
+for i in range(1, number_of_airfoils - 1):
     profiles.append(Profile())
     verts, splines = get_airfoil_data(i)
     z = (verts[0][2] + verts[1][2] + verts[2][2] + verts[3][2]) / 4
@@ -97,17 +101,17 @@ verts = create_square(1, TIP_LENGTH)
 verts.extend(create_square(HUB_LENGTH, TIP_LENGTH))
 Vertices.set_verts(profiles[-1], verts)
 
-for i in range(number_of_airfoils-2):
+for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles[i], profiles[i+1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i+1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i+1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles[i], profiles[i+1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [0, 3, 7, 4], [15, 10, 10])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [3, 2, 6, 7], [10, 10, 10])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [2, 1, 5, 6], [15, 10, 10])
+    Hexes.set_hexes(profiles[i], profiles[i + 1], [1, 0, 4, 5], [10, 10, 10])
     # Create boundaries and store them at the global list
-    Boundaries.set_boundaries("blade", profiles[i], [0, 3], profiles[i+1], [3, 0])
-    Boundaries.set_boundaries("blade", profiles[i], [3, 2], profiles[i+1], [2, 3])
-    Boundaries.set_boundaries("blade", profiles[i], [2, 1], profiles[i+1], [1, 2])
-    Boundaries.set_boundaries("blade", profiles[i], [1, 0], profiles[i+1], [0, 1])
+    Boundaries.set_boundaries("blade", profiles[i], [0, 3], profiles[i + 1], [3, 0])
+    Boundaries.set_boundaries("blade", profiles[i], [3, 2], profiles[i + 1], [2, 3])
+    Boundaries.set_boundaries("blade", profiles[i], [2, 1], profiles[i + 1], [1, 2])
+    Boundaries.set_boundaries("blade", profiles[i], [1, 0], profiles[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
 Hexes.set_hexes(profiles[-2], profiles[-1], [0, 3, 7, 4], [15, 10, 10])
@@ -127,7 +131,7 @@ Boundaries.set_boundaries("hub", profiles[0], [1, 5, 4, 0])
 
 # Create initial variables and hub profile
 profiles_left = [Profile()]
-angle = 120
+angle = -120
 # Copy vertices
 reference = profiles[0]
 verts = rotate_on_angle(reference.verts, angle)
@@ -148,7 +152,7 @@ profiles_left[0].set_arc_splines(5, 6, arc_splines[1])
 Splines.set_splines(profiles_left[0])
 
 # Create the rest of profiles
-for i in range(1, number_of_airfoils-1):
+for i in range(1, number_of_airfoils - 1):
     profiles_left.append(Profile())
     reference = profiles[i]
     verts = rotate_on_angle(reference.verts, angle)
@@ -168,17 +172,17 @@ reference = profiles[-1]
 verts = rotate_on_angle(reference.verts, angle)
 Vertices.set_verts(profiles_left[-1], verts)
 
-for i in range(number_of_airfoils-2):
+for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles_left[i], profiles_left[i+1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i+1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i+1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles_left[i], profiles_left[i+1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [0, 3, 7, 4], [15, 10, 10])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [3, 2, 6, 7], [10, 10, 10])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [2, 1, 5, 6], [15, 10, 10])
+    Hexes.set_hexes(profiles_left[i], profiles_left[i + 1], [1, 0, 4, 5], [10, 10, 10])
     # Create boundaries and store them at the global list
-    Boundaries.set_boundaries("blade", profiles_left[i], [0, 3], profiles_left[i+1], [3, 0])
-    Boundaries.set_boundaries("blade", profiles_left[i], [3, 2], profiles_left[i+1], [2, 3])
-    Boundaries.set_boundaries("blade", profiles_left[i], [2, 1], profiles_left[i+1], [1, 2])
-    Boundaries.set_boundaries("blade", profiles_left[i], [1, 0], profiles_left[i+1], [0, 1])
+    Boundaries.set_boundaries("blade", profiles_left[i], [0, 3], profiles_left[i + 1], [3, 0])
+    Boundaries.set_boundaries("blade", profiles_left[i], [3, 2], profiles_left[i + 1], [2, 3])
+    Boundaries.set_boundaries("blade", profiles_left[i], [2, 1], profiles_left[i + 1], [1, 2])
+    Boundaries.set_boundaries("blade", profiles_left[i], [1, 0], profiles_left[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
 Hexes.set_hexes(profiles_left[-2], profiles_left[-1], [0, 3, 7, 4], [15, 10, 10])
@@ -198,7 +202,7 @@ Boundaries.set_boundaries("hub", profiles_left[0], [1, 5, 4, 0])
 
 # Create initial variables and hub profile
 profiles_right = [Profile()]
-angle = -120
+angle = 120
 # Copy vertices
 reference = profiles[0]
 verts = rotate_on_angle(reference.verts, angle)
@@ -219,7 +223,7 @@ profiles_right[0].set_arc_splines(5, 6, arc_splines[1])
 Splines.set_splines(profiles_right[0])
 
 # Create the rest of profiles
-for i in range(1, number_of_airfoils-1):
+for i in range(1, number_of_airfoils - 1):
     profiles_right.append(Profile())
     reference = profiles[i]
     verts = rotate_on_angle(reference.verts, angle)
@@ -239,17 +243,17 @@ reference = profiles[-1]
 verts = rotate_on_angle(reference.verts, angle)
 Vertices.set_verts(profiles_right[-1], verts)
 
-for i in range(number_of_airfoils-2):
+for i in range(number_of_airfoils - 2):
     # Create hexes and store them at the global list
-    Hexes.set_hexes(profiles_right[i], profiles_right[i+1], [0, 3, 7, 4], [15, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i+1], [3, 2, 6, 7], [10, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i+1], [2, 1, 5, 6], [15, 10, 10])
-    Hexes.set_hexes(profiles_right[i], profiles_right[i+1], [1, 0, 4, 5], [10, 10, 10])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [0, 3, 7, 4], [15, 10, 10])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [3, 2, 6, 7], [10, 10, 10])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [2, 1, 5, 6], [15, 10, 10])
+    Hexes.set_hexes(profiles_right[i], profiles_right[i + 1], [1, 0, 4, 5], [10, 10, 10])
     # Create boundaries and store them at the global list
-    Boundaries.set_boundaries("blade", profiles_right[i], [0, 3], profiles_right[i+1], [3, 0])
-    Boundaries.set_boundaries("blade", profiles_right[i], [3, 2], profiles_right[i+1], [2, 3])
-    Boundaries.set_boundaries("blade", profiles_right[i], [2, 1], profiles_right[i+1], [1, 2])
-    Boundaries.set_boundaries("blade", profiles_right[i], [1, 0], profiles_right[i+1], [0, 1])
+    Boundaries.set_boundaries("blade", profiles_right[i], [0, 3], profiles_right[i + 1], [3, 0])
+    Boundaries.set_boundaries("blade", profiles_right[i], [3, 2], profiles_right[i + 1], [2, 3])
+    Boundaries.set_boundaries("blade", profiles_right[i], [2, 1], profiles_right[i + 1], [1, 2])
+    Boundaries.set_boundaries("blade", profiles_right[i], [1, 0], profiles_right[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
 Hexes.set_hexes(profiles_right[-2], profiles_right[-1], [0, 3, 7, 4], [15, 10, 10])
@@ -262,6 +266,61 @@ Boundaries.set_boundaries("hub", profiles_right[0], [0, 4, 7, 3])
 Boundaries.set_boundaries("hub", profiles_right[0], [3, 7, 6, 2])
 Boundaries.set_boundaries("hub", profiles_right[0], [2, 6, 5, 1])
 Boundaries.set_boundaries("hub", profiles_right[0], [1, 5, 4, 0])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Create right fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+fillers_right = []
+for i in range(number_of_airfoils):
+    fillers_right.append(Profile())
+    fillers_right[i].verts_id = [profiles_right[i].verts_id[7], profiles_right[i].verts_id[6],
+                                 profiles[i].verts_id[5], profiles[i].verts_id[4]]
+    fillers_right[i].set_arc_splines(0, 3, [0, HUB_LENGTH / 2, RADS[i]])
+    fillers_right[i].set_arc_splines(1, 2, [0, -HUB_LENGTH / 2, RADS[i]])
+    Splines.set_splines(fillers_right[i])
+
+Boundaries.set_boundaries("hub", fillers_right[0], [3, 2, 1, 0])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(fillers_right[i], fillers_right[i + 1], [0, 1, 2, 3], [10, 20, 10])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Create left fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+fillers_left = []
+for i in range(number_of_airfoils):
+    fillers_left.append(Profile())
+    fillers_left[i].verts_id = [profiles[i].verts_id[7], profiles[i].verts_id[6],
+                                profiles_left[i].verts_id[5], profiles_left[i].verts_id[4]]
+    fillers_left[i].set_arc_splines(3, 0, [0, HUB_LENGTH / 2, RADS[i]])
+    fillers_left[i].set_arc_splines(2, 1, [0, -HUB_LENGTH / 2, RADS[i]])
+    Splines.set_splines(fillers_left[i])
+
+Boundaries.set_boundaries("hub", fillers_left[0], [3, 2, 1, 0])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(fillers_left[i], fillers_left[i + 1], [0, 1, 2, 3], [10, 20, 10])
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+# Create bot fillers
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
+
+fillers_bot = []
+for i in range(number_of_airfoils):
+    fillers_bot.append(Profile())
+    fillers_bot[i].verts_id = [profiles_left[i].verts_id[7], profiles_left[i].verts_id[6],
+                               profiles_right[i].verts_id[5], profiles_right[i].verts_id[4]]
+    fillers_bot[i].set_arc_splines(3, 0, [RADS[i], HUB_LENGTH / 2, 0])
+    fillers_bot[i].set_arc_splines(2, 1, [RADS[i], -HUB_LENGTH / 2, 0])
+    Splines.set_splines(fillers_bot[i])
+
+Boundaries.set_boundaries("hub", fillers_bot[0], [3, 2, 1, 0])
+
+for i in range(number_of_airfoils - 1):
+    Hexes.set_hexes(fillers_bot[i], fillers_bot[i + 1], [0, 1, 2, 3], [10, 20, 10])
+
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Create blockMesh
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
