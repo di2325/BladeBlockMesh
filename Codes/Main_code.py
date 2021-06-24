@@ -134,10 +134,10 @@ for i in range(number_of_airfoils - 2):
     Hexes.set_hexes(profiles[i], profiles[i + 1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_RADIUS], [1, 50, 1])
     Hexes.set_hexes(profiles[i], profiles[i + 1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_RADIUS], [1, 50, 1])
     # Create boundaries and store them at the global list
-    Boundaries.set_boundaries("blade", profiles[i], [0, 3], profiles[i + 1], [3, 0])
-    Boundaries.set_boundaries("blade", profiles[i], [3, 2], profiles[i + 1], [2, 3])
-    Boundaries.set_boundaries("blade", profiles[i], [2, 1], profiles[i + 1], [1, 2])
-    Boundaries.set_boundaries("blade", profiles[i], [1, 0], profiles[i + 1], [0, 1])
+    Boundaries.set_boundaries("blade1", profiles[i], [0, 3], profiles[i + 1], [3, 0])
+    Boundaries.set_boundaries("blade1", profiles[i], [3, 2], profiles[i + 1], [2, 3])
+    Boundaries.set_boundaries("blade1", profiles[i], [2, 1], profiles[i + 1], [1, 2])
+    Boundaries.set_boundaries("blade1", profiles[i], [1, 0], profiles[i + 1], [0, 1])
 
 # Creating tip hexes and boundaries
 Hexes.set_hexes(profiles[-2], profiles[-1], [0, 3, 7, 4], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_OUTER_RADIUS], [1, 50, 1])
@@ -145,7 +145,7 @@ Hexes.set_hexes(profiles[-2], profiles[-1], [3, 2, 6, 7], [MESH_BLADE_SIDE, MESH
 Hexes.set_hexes(profiles[-2], profiles[-1], [2, 1, 5, 6], [MESH_BLADE_TOP, MESH_YPLUS_MAIN, MESH_OUTER_RADIUS], [1, 50, 1])
 Hexes.set_hexes(profiles[-2], profiles[-1], [1, 0, 4, 5], [MESH_BLADE_SIDE, MESH_YPLUS_MAIN, MESH_OUTER_RADIUS], [1, 50, 1])
 Hexes.set_hexes(profiles[-2], profiles[-1], [0, 1, 2, 3], [MESH_BLADE_SIDE, MESH_BLADE_TOP, MESH_OUTER_RADIUS])
-Boundaries.set_boundaries("blade", profiles[-2], [3, 2, 1, 0])
+Boundaries.set_boundaries("blade1", profiles[-2], [3, 2, 1, 0])
 Boundaries.set_boundaries("hub", profiles[0], [0, 4, 7, 3])
 Boundaries.set_boundaries("hub", profiles[0], [3, 7, 6, 2])
 Boundaries.set_boundaries("hub", profiles[0], [2, 6, 5, 1])
