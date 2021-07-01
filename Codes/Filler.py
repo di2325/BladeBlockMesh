@@ -7,7 +7,7 @@ class Filler:
         self.rad0 = (blade0.hub[0 + i].shell[9][0]**2 + blade0.hub[0 + i].shell[9][2]**2)**0.5
         self.rad1 = (blade0.hub[1 + i].shell[9][0]**2 + blade0.hub[1 + i].shell[9][2]**2)**0.5
         self.angle = angle
-        self.meshCoeff = 0.5
+        self.meshCoeff = 0.4
         
     
     def ExportHex(self):

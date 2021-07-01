@@ -102,7 +102,7 @@ for i in range(numberOfBlades):
 for i in range(numberOfBlades):
     for ii in range(numberOfAirfoils - 1):
         if i == 0:
-            hubHex += [line for line in blade[i].ExportHexAirfoil(ii, True)]
+            hubHex += [line for line in blade[i].ExportHexAirfoil(ii)]  #, True)]
         else:
             hubHex += [line for line in blade[i].ExportHexAirfoil(ii)]
 for i in range(numberOfBlades):

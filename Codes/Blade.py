@@ -1,7 +1,7 @@
 from CustomMath import Sin, Cos, RotateOnAngle
 class Blade:
     def __init__(self,):
-        self.meshCoeff = 0.5
+        self.meshCoeff = 0.4
     
 #==================================================   
     def ExportHexHub(self, i):

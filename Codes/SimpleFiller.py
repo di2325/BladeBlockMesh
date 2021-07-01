@@ -3,7 +3,7 @@ class SimpleFiller:
     def __init__(self, latestVertCount):
         self.vertCount = [latestVertCount + i for i in range(36)]
         self.shell = []
-        self.meshCoeff = 0.5
+        self.meshCoeff = 0.4
         self.CalculateVerts()
         
         

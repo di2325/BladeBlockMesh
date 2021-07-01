@@ -7,7 +7,7 @@ class HubFiller:
         self.length = length * invert
         self.shell = []
         self.CalculateVerts()
-        self.meshCoeff = 0.5
+        self.meshCoeff = 0.4
         
         
     def CalculateVerts(self):
