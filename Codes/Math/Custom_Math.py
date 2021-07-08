@@ -27,3 +27,7 @@ def triangle_rad(a, b):
 
 def triangle_side(c, a):
     return math.sqrt((c ** 2) - (a ** 2))
+
+
+def shell_side(rad):
+    return rad * Cos(45)

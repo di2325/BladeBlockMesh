@@ -77,92 +77,48 @@ def get_airfoil_data(airfoil_number):
             on_top = False
 
     # Calculate Center point for the front circle
-    boundary_three = [most_right[0] + 0.05 *
-                      (most_left[0] - most_right[0]),
-                      (most_left[1] + most_right[1]) / 2,
-                      (most_left[2] + most_right[2]) / 2]
+    boundary = [most_right[0] + 0.25 *
+                (most_left[0] - most_right[0]),
+                (most_left[1] + most_right[1]) / 2,
+                (most_left[2] + most_right[2]) / 2]
 
-    boundary_two = [most_right[0] + 0.3 *
-                    (most_left[0] - most_right[0]),
-                    (most_left[1] + most_right[1]) / 2,
-                    (most_left[2] + most_right[2]) / 2]
-
-    boundary_one = [most_right[0] + 0.825 *
-                    (most_left[0] - most_right[0]),
-                    (most_left[1] + most_right[1]) / 2,
-                    (most_left[2] + most_right[2]) / 2]
-
-    top_one = top_two = top_three = 0
-    bot_one = bot_two = bot_three = 0
+    top_vert = 0
+    bot_vert = 0
 
     # Finding boundary points
     delta = 1000
     for line in top:
-        if delta > abs(boundary_one[0] - line[0]):
-            top_one = line
-            delta = abs(boundary_one[0] - line[0])
+        if delta > abs(boundary[0] - line[0]):
+            top_vert = line
+            delta = abs(boundary[0] - line[0])
     delta = 1000
     for line in bot:
-        if delta > abs(boundary_one[0] - line[0]):
-            bot_one = line
-            delta = abs(boundary_one[0] - line[0])
-
-    delta = 1000
-    for line in top:
-        if delta > abs(boundary_two[0] - line[0]):
-            top_two = line
-            delta = abs(boundary_two[0] - line[0])
-    delta = 1000
-    for line in bot:
-        if delta > abs(boundary_two[0] - line[0]):
-            bot_two = line
-            delta = abs(boundary_two[0] - line[0])
-
-    delta = 1000
-    for line in top:
-        if delta > abs(boundary_three[0] - line[0]):
-            top_three = line
-            delta = abs(boundary_three[0] - line[0])
-    delta = 1000
-    for line in bot:
-        if delta > abs(boundary_three[0] - line[0]):
-            bot_three = line
-            delta = abs(boundary_three[0] - line[0])
+        if delta > abs(boundary[0] - line[0]):
+            bot_vert = line
+            delta = abs(boundary[0] - line[0])
 
     # Creating splines
     spline_zero = []
     spline_one = []
     spline_two = []
     spline_three = []
-    spline_four = []
-    spline_five = []
-    spline_six = []
-    spline_seven = []
 
     # Dividing top and bot
     for line in top:
-        if line[0] < top_three[0]:
-            spline_four.append(line)
-        elif top_two[0] > line[0] > top_three[0]:
-            spline_five.append(line)
-        elif top_one[0] > line[0] > top_two[0]:
-            spline_six.append(line)
-        elif line[0] > top_one[0]:
-            spline_seven.append(line)
-
-    for line in bot:
-        if line[0] < bot_three[0]:
-            spline_three.append(line)
-        elif bot_two[0] > line[0] > bot_three[0]:
-            spline_two.append(line)
-        elif bot_one[0] > line[0] > bot_two[0]:
+        if line[0] < top_vert[0]:
             spline_one.append(line)
-        elif line[0] > bot_one[0]:
+        elif line[0] > top_vert[0]:
             spline_zero.append(line)
 
+    for line in bot:
+        if line[0] < bot_vert[0]:
+            spline_two.append(line)
+        elif line[0] > bot_vert[0]:
+            spline_three.append(line)
+
     # Saves vertices to verts and IDs to verts_id
-    verts = [most_left, top_one, top_two, top_three, most_right, bot_three, bot_two, bot_one]
-    splines = [spline_zero, spline_one, spline_two, spline_three, spline_four, spline_five, spline_six, spline_seven]
+    verts = [most_left, top_vert, most_right, bot_vert]
+    splines = [spline_zero, spline_one, spline_two, spline_three]
 
     return verts, splines
 
