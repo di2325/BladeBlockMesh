@@ -187,13 +187,15 @@ profile = []
 profile1 = Profile()
 profile2 = Profile()
 
-verts, splines = get_airfoil_data(1)
+verts, splines = get_airfoil_data(2)
 z = verts[0][2]
 verts.extend([[1, 0, z],
               [1, 0.5, z],
               [0.75, 0.5, z],
               [0, 0.5, z],
-              [-0.5, 0, z],
+              [-0.5, 0.5, z],
+              [-0.5, -0.15, z],
+              [-0.5, -0.5, z],
               [0, -0.5, z],
               [0.75, -0.5, z],
               [1, -0.5, z]])
@@ -201,19 +203,20 @@ Vertices.set_verts(profile1, verts)
 profile1.set_b_splines(1, 0, splines[0])
 profile1.set_b_splines(2, 1, splines[1])
 profile1.set_b_splines(3, 2, splines[2])
-profile1.set_b_splines(0, 3, splines[3])
-# profile1.set_arc_splines(8, 7, (-shell_side(SHELL_HEIGHT) - 1, shell_side(SHELL_HEIGHT), z))
-# profile1.set_arc_splines(8, 9, (-shell_side(SHELL_HEIGHT) - 1, -shell_side(SHELL_HEIGHT), z))
+profile1.set_b_splines(4, 3, splines[3])
+profile1.set_b_splines(5, 4, splines[4])
+profile1.set_b_splines(0, 5, splines[5])
 Splines.set_splines(profile1)
 
-profile.append(Profile())
-verts, splines = get_airfoil_data(2)
+verts, splines = get_airfoil_data(3)
 z = verts[0][2]
 verts.extend([[1, 0, z],
               [1, 0.5, z],
               [0.75, 0.5, z],
               [0, 0.5, z],
-              [-0.5, 0, z],
+              [-0.5, 0.5, z],
+              [-0.5, -0.15, z],
+              [-0.5, -0.5, z],
               [0, -0.5, z],
               [0.75, -0.5, z],
               [1, -0.5, z]])
@@ -221,17 +224,19 @@ Vertices.set_verts(profile2, verts)
 profile2.set_b_splines(1, 0, splines[0])
 profile2.set_b_splines(2, 1, splines[1])
 profile2.set_b_splines(3, 2, splines[2])
-profile2.set_b_splines(0, 3, splines[3])
-# profile2.set_arc_splines(8, 7, (-shell_side(SHELL_HEIGHT) - 1, shell_side(SHELL_HEIGHT), z))
-# profile2.set_arc_splines(8, 9, (-shell_side(SHELL_HEIGHT) - 1, -shell_side(SHELL_HEIGHT), z))
+profile2.set_b_splines(4, 3, splines[3])
+profile2.set_b_splines(5, 4, splines[4])
+profile2.set_b_splines(0, 5, splines[5])
 Splines.set_splines(profile2)
 
-Hexes.set_hexes(profile1, profile2, [0, 4, 5, 6])
-Hexes.set_hexes(profile1, profile2, [1, 0, 6, 7])
-Hexes.set_hexes(profile1, profile2, [2, 1, 7, 8])
-Hexes.set_hexes(profile1, profile2, [3, 2, 8, 9])
-Hexes.set_hexes(profile1, profile2, [0, 3, 9, 10])
-Hexes.set_hexes(profile1, profile2, [4, 0, 10, 11])
+Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8])
+Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9])
+Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10])
+Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11])
+Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12])
+Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13])
+Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14])
+Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15])
 
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
