@@ -183,34 +183,13 @@ def blade_hex_tip(profile1, profile2):
 # Main Code
 # ==================================================================================================================== #
 profile = []
-i = 0
 
-for i in range(number_of_airfoils):
-    profile.append(Profile())
-    blade_profile(profile[i], i)
-
-profile.append(Profile())
-blade_profile_tip(profile[-1])
-
-
-for i in range(number_of_airfoils - 1):
-    blade_hex(profile[i], profile[i + 1])
-
-blade_hex_tip(profile[-2], profile[-1])
-Boundaries.set_boundaries("b1_bot", profile[0], [6, 5, 4, 0])
-Boundaries.set_boundaries("b1_bot", profile[0], [7, 6, 0, 1])
-Boundaries.set_boundaries("b1_bot", profile[0], [8, 7, 1, 2])
-Boundaries.set_boundaries("b1_bot", profile[0], [9, 8, 2, 3])
-Boundaries.set_boundaries("b1_bot", profile[0], [10, 9, 3, 0])
-Boundaries.set_boundaries("b1_bot", profile[0], [11, 10, 0, 4])
-
-Boundaries.set_boundaries("b1_top", profile[-1], [0, 4, 5, 6])
-Boundaries.set_boundaries("b1_top", profile[-1], [1, 0, 6, 7])
-Boundaries.set_boundaries("b1_top", profile[-1], [2, 1, 7, 8])
-Boundaries.set_boundaries("b1_top", profile[-1], [3, 2, 8, 9])
-Boundaries.set_boundaries("b1_top", profile[-1], [0, 3, 9, 10])
-Boundaries.set_boundaries("b1_top", profile[-1], [4, 0, 10, 11])
-Boundaries.set_boundaries("b1_top", profile[-1], [0, 1, 2, 3])
+verts, splines = get_airfoil_data(2)
+for vert in verts:
+    print(vert)
+print("splines")
+for spline in splines:
+    print(spline)
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Create blockMesh
