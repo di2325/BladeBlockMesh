@@ -9,7 +9,7 @@ import os
 from Codes.Math.Custom_Math import *
 
 
-def get_airfoil_data(airfoil_number):
+def get_airfoil_data(airfoil_name, b0=0.62, b1=0.30):
     # Declaration of variables
     coord = []
     index = []
@@ -17,7 +17,7 @@ def get_airfoil_data(airfoil_number):
     bot = []
 
     # Searching for airfoil files
-    for line in open(os.path.abspath(f'../Coordinates/airfoil{airfoil_number}'), "r"):
+    for line in open(os.path.abspath(f'../Coordinates/{airfoil_name}'), "r"):
         # Assign Coordinates
         if line.startswith('v'):
             coord.append((round(float(line.split()[1]), 4),
@@ -77,12 +77,12 @@ def get_airfoil_data(airfoil_number):
             on_top = False
 
     # Calculate Center point for the front circle
-    boundary_0 = [most_right[0] + 0.25 *
+    boundary_0 = [most_right[0] + b0 *
                   (most_left[0] - most_right[0]),
                   (most_left[1] + most_right[1]) / 2,
                   (most_left[2] + most_right[2]) / 2]
 
-    boundary_1 = [most_right[0] + 0.1 *
+    boundary_1 = [most_right[0] + b1 *
                   (most_left[0] - most_right[0]),
                   (most_left[1] + most_right[1]) / 2,
                   (most_left[2] + most_right[2]) / 2]
