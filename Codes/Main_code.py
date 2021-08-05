@@ -63,7 +63,7 @@ for file in os.listdir(os.path.abspath('../Coordinates')):
 # Main Code
 # ==================================================================================================================== #
 profile = []
-
+HEXES = 10
 for i in range(number_of_airfoils):
     profile.append(Profile())
     verts_out, splines_out = get_airfoil_data("airfoil" + str(i))
@@ -101,16 +101,16 @@ for i in range(number_of_airfoils):
     profile[i].set_b_splines(6, 11, splines_out[5])
     Splines.set_splines(profile[i])
 
-z = 10
+z = HEXES
 for i in range(number_of_airfoils-1):
     if i == number_of_airfoils-2:
         z = 4
-    Hexes.set_hexes(profile[i], profile[i + 1], [1, 0, 6, 7], [10, 1, z])
-    Hexes.set_hexes(profile[i], profile[i + 1], [2, 1, 7, 8], [10, 1, z])
-    Hexes.set_hexes(profile[i], profile[i + 1], [3, 2, 8, 9], [10, 1, z])
-    Hexes.set_hexes(profile[i], profile[i + 1], [4, 3, 9, 10], [10, 1, z])
-    Hexes.set_hexes(profile[i], profile[i + 1], [5, 4, 10, 11], [10, 1, z])
-    Hexes.set_hexes(profile[i], profile[i + 1], [0, 5, 11, 6], [10, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [1, 0, 6, 7], [HEXES, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [2, 1, 7, 8], [HEXES, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [3, 2, 8, 9], [HEXES, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [4, 3, 9, 10], [HEXES, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [5, 4, 10, 11], [HEXES, 1, z])
+    Hexes.set_hexes(profile[i], profile[i + 1], [0, 5, 11, 6], [HEXES, 1, z])
     Boundaries.set_boundaries("blade", profile[i], [6, 7], profile[i + 1], [7, 6])
     Boundaries.set_boundaries("blade", profile[i], [7, 8], profile[i + 1], [8, 7])
     Boundaries.set_boundaries("blade", profile[i], [8, 9], profile[i + 1], [9, 8])
