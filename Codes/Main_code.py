@@ -155,13 +155,13 @@ for i in range(number_of_airfoils):
 for i in range(number_of_airfoils - 1):
     blade_hex(profile[i], profile[i+1])
 
-# profile_copy = []
-# for i in range(number_of_airfoils):
-#     profile_copy.append(Profile())
-#     copy_blade_profile(profile_copy[i], profile[i])
-#
-# for i in range(number_of_airfoils - 1):
-#     blade_hex(profile_copy[i], profile_copy[i+1], "blade", "_two")
+profile_copy = []
+for i in range(number_of_airfoils):
+    profile_copy.append(Profile())
+    copy_blade_profile(profile_copy[i], profile[i])
+
+for i in range(number_of_airfoils - 1):
+    blade_hex(profile_copy[i], profile_copy[i+1], "blade", "_two")
 
 Boundaries.set_boundaries("bottom_one", profile[0], [8, 7, 6, 0])
 Boundaries.set_boundaries("bottom_one", profile[0], [9, 8, 0, 1])
@@ -173,14 +173,14 @@ Boundaries.set_boundaries("bottom_one", profile[0], [14, 13, 5, 0])
 Boundaries.set_boundaries("bottom_one", profile[0], [15, 14, 0, 6])
 
 
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [8, 7, 6, 0])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [9, 8, 0, 1])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [10, 9, 1, 2])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [11, 10, 2, 3])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [12, 11, 3, 4])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [13, 12, 4, 5])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [14, 13, 5, 0])
-# Boundaries.set_boundaries("bottom_two", profile_copy[0], [15, 14, 0, 6])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [8, 7, 6, 0])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [9, 8, 0, 1])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [10, 9, 1, 2])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [11, 10, 2, 3])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [12, 11, 3, 4])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [13, 12, 4, 5])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [14, 13, 5, 0])
+Boundaries.set_boundaries("bottom_two", profile_copy[0], [15, 14, 0, 6])
 
 Boundaries.set_boundaries("top_one", profile[-1], [0, 6, 7, 8])
 Boundaries.set_boundaries("top_one", profile[-1], [1, 0, 8, 9])
@@ -191,14 +191,14 @@ Boundaries.set_boundaries("top_one", profile[-1], [5, 4, 12, 13])
 Boundaries.set_boundaries("top_one", profile[-1], [0, 5, 13, 14])
 Boundaries.set_boundaries("top_one", profile[-1], [6, 0, 14, 15])
 
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 6, 7, 8])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [1, 0, 8, 9])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [2, 1, 9, 10])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [3, 2, 10, 11])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [4, 3, 11, 12])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [5, 4, 12, 13])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 5, 13, 14])
-# Boundaries.set_boundaries("top_two", profile_copy[-1], [6, 0, 14, 15])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 6, 7, 8])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [1, 0, 8, 9])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [2, 1, 9, 10])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [3, 2, 10, 11])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [4, 3, 11, 12])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [5, 4, 12, 13])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 5, 13, 14])
+Boundaries.set_boundaries("top_two", profile_copy[-1], [6, 0, 14, 15])
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Create blockMesh
