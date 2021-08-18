@@ -106,35 +106,36 @@ def blade_profile(prof, n):
     Splines.set_splines(prof)
 
 
-def blade_hex(profile1, profile2, tip=False, name="blade", dir="_one"):
+def blade_hex(profile1, profile2, mult=1, graiding=1, tip=False, name="blade", dir="_one"):
     if tip:
-        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY, round(M_BETWEEN / 2)],
-                        [1, 1, 1, 1, GRADING, 1, 1, GRADING, 1, 1, 1, 1])
-        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY, round(M_BETWEEN / 2)], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY, round(M_BETWEEN / 2)],
-                        [1, 1, 1, 1, 1, GRADING, GRADING, 1, 1, 1, 1, 1])
+        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY * mult, round(M_BETWEEN / 2)],
+                        [1, 1, 1, 1, graiding, 1, 1, graiding, 1, 1, 1, 1])
+        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY * mult, round(M_BETWEEN / 2)],
+                        [1, 1, 1, 1, 1, graiding, graiding, 1, 1, 1, 1, 1])
     else:
-        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY, M_BETWEEN],
-                        [1, 1, 1, 1, GRADING, 1, 1, GRADING, 1, 1, 1, 1])
-        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY, M_BETWEEN], [1, GRADING, 1])
-        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY, M_BETWEEN],
-                        [1, 1, 1, 1, 1, GRADING, GRADING, 1, 1, 1, 1, 1])
-    Boundaries.set_boundaries(name, profile1, [1, 0], profile2, [0, 1])
-    Boundaries.set_boundaries(name, profile1, [2, 1], profile2, [1, 2])
-    Boundaries.set_boundaries(name, profile1, [3, 2], profile2, [2, 3])
-    Boundaries.set_boundaries(name, profile1, [4, 3], profile2, [3, 4])
-    Boundaries.set_boundaries(name, profile1, [5, 4], profile2, [4, 5])
-    Boundaries.set_boundaries(name, profile1, [0, 5], profile2, [5, 0])
+        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY * mult, M_BETWEEN],
+                        [1, 1, 1, 1, graiding, 1, 1, graiding, 1, 1, 1, 1])
+        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
+        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY * mult, M_BETWEEN],
+                        [1, 1, 1, 1, 1, graiding, graiding, 1, 1, 1, 1, 1])
+
+    Boundaries.set_boundaries(name + dir, profile1, [1, 0], profile2, [0, 1])
+    Boundaries.set_boundaries(name + dir, profile1, [2, 1], profile2, [1, 2])
+    Boundaries.set_boundaries(name + dir, profile1, [3, 2], profile2, [2, 3])
+    Boundaries.set_boundaries(name + dir, profile1, [4, 3], profile2, [3, 4])
+    Boundaries.set_boundaries(name + dir, profile1, [5, 4], profile2, [4, 5])
+    Boundaries.set_boundaries(name + dir, profile1, [0, 5], profile2, [5, 0])
 
     Boundaries.set_boundaries("merge_in0" + dir, profile1, [6, 7], profile2, [7, 6])
     Boundaries.set_boundaries("merge_in1" + dir, profile1, [7, 8], profile2, [8, 7])
@@ -167,9 +168,9 @@ for i in range(number_of_airfoils):
 
 for i in range(number_of_airfoils - 1):
     if i == number_of_airfoils - 2:
-        blade_hex(profile[i], profile[i + 1], True)
+        blade_hex(profile[i], profile[i + 1], 2, GRADING, True)
     else:
-        blade_hex(profile[i], profile[i + 1])
+        blade_hex(profile[i], profile[i + 1], 2, GRADING)
 
 profile_copy = []
 for i in range(number_of_airfoils):
@@ -178,9 +179,9 @@ for i in range(number_of_airfoils):
 
 for i in range(number_of_airfoils - 1):
     if i == number_of_airfoils - 2:
-        blade_hex(profile_copy[i], profile_copy[i+1], True, "blade", "_two")
+        blade_hex(profile_copy[i], profile_copy[i+1], 1, 1, True, "blade", "_two")
     else:
-        blade_hex(profile_copy[i], profile_copy[i + 1], False, "blade", "_two")
+        blade_hex(profile_copy[i], profile_copy[i + 1], 1, 1, False, "blade", "_two")
 
 Boundaries.set_boundaries("bottom_one", profile[0], [8, 7, 6, 0])
 Boundaries.set_boundaries("bottom_one", profile[0], [9, 8, 0, 1])
