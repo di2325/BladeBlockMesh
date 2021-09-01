@@ -54,23 +54,10 @@ from Codes.BlockMesh.Boundaries import Boundaries
 
 from Codes.Profiles.Profile import Profile
 
-S_LENGTH = 2
-S_START_L = 1
-S_TAIL = 0.16
-S_MID_L = 0.50
-
-S_HEIGHT = 1
-S_START_H = 0.5
-S_MID_H = 0.6
-
-M_TOP_CELLS = 15
-M_TAIL = round(M_TOP_CELLS * S_TAIL)
-M_INSIDE = round(M_TOP_CELLS * S_MID_L)
-M_MID = M_TOP_CELLS - M_TAIL - M_INSIDE
-M_BOUNDARY = 10
-M_BETWEEN = 6
-
-GRADING = 15
+M_HEIGHT = 10
+M_WIDTH = 20
+M_LENGTH = 7
+M_BOUNDARY = 15
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
@@ -83,70 +70,29 @@ for file in os.listdir(os.path.abspath('../Coordinates')):
 # ==================================================================================================================== #
 
 
-def blade_profile(prof, n):
+def blade_profile(profile, n):
     verts, splines = get_airfoil_data(n)
     z = verts[0][2]
-    verts.extend([[S_START_L, S_START_H - (S_HEIGHT / 2), z],
-                  [S_START_L, S_START_H, z],
-                  [S_START_L - (S_TAIL * S_LENGTH), S_START_H, z],
-                  [S_START_L - (S_TAIL * S_LENGTH) - (S_MID_L * S_LENGTH), S_START_H, z],
-                  [S_START_L - S_LENGTH, S_START_H, z],
-                  [S_START_L - S_LENGTH, S_START_H - (S_HEIGHT * S_MID_H), z],
-                  [S_START_L - S_LENGTH, S_START_H - S_HEIGHT, z],
-                  [S_START_L - (S_TAIL * S_LENGTH) - (S_MID_L * S_LENGTH), S_START_H - S_HEIGHT, z],
-                  [S_START_L - (S_TAIL * S_LENGTH), S_START_H - S_HEIGHT, z],
-                  [S_START_L, S_START_H - S_HEIGHT, z]])
-    Vertices.set_verts(prof, verts)
-    prof.set_b_splines(1, 0, splines[0])
-    prof.set_b_splines(2, 1, splines[1])
-    prof.set_b_splines(3, 2, splines[2])
-    prof.set_b_splines(4, 3, splines[3])
-    prof.set_b_splines(5, 4, splines[4])
-    prof.set_b_splines(0, 5, splines[5])
-    Splines.set_splines(prof)
+    verts.extend(((1, 0.5, z),
+                 (-1, 0.5, z),
+                 (-1, -0.5, z),
+                 (1, -0.5, z)))
+    Vertices.set_verts(profile, verts)
+    profile.set_b_splines(1, 0, splines[0])
+    profile.set_b_splines(2, 1, splines[1])
+    profile.set_b_splines(3, 2, splines[2])
+    Splines.set_splines(profile)
 
 
-def blade_hex(profile1, profile2, mult=1, graiding=1, tip=False, name="blade", dir="_one"):
-    if tip:
-        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY * mult, round(M_BETWEEN / 2)],
-                        [1, 1, 1, 1, graiding, 1, 1, graiding, 1, 1, 1, 1])
-        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY * mult, round(M_BETWEEN / 2)], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY * mult, round(M_BETWEEN / 2)],
-                        [1, 1, 1, 1, 1, graiding, graiding, 1, 1, 1, 1, 1])
-    else:
-        Hexes.set_hexes(profile1, profile2, [0, 6, 7, 8], [M_TAIL, M_BOUNDARY * mult, M_BETWEEN],
-                        [1, 1, 1, 1, graiding, 1, 1, graiding, 1, 1, 1, 1])
-        Hexes.set_hexes(profile1, profile2, [1, 0, 8, 9], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [2, 1, 9, 10], [M_MID, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [3, 2, 10, 11], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [4, 3, 11, 12], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [5, 4, 12, 13], [M_MID, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [0, 5, 13, 14], [M_INSIDE, M_BOUNDARY * mult, M_BETWEEN], [1, graiding, 1])
-        Hexes.set_hexes(profile1, profile2, [6, 0, 14, 15], [M_TAIL, M_BOUNDARY * mult, M_BETWEEN],
-                        [1, 1, 1, 1, 1, graiding, graiding, 1, 1, 1, 1, 1])
-
-    Boundaries.set_boundaries(name + dir, profile1, [1, 0], profile2, [0, 1])
-    Boundaries.set_boundaries(name + dir, profile1, [2, 1], profile2, [1, 2])
-    Boundaries.set_boundaries(name + dir, profile1, [3, 2], profile2, [2, 3])
-    Boundaries.set_boundaries(name + dir, profile1, [4, 3], profile2, [3, 4])
-    Boundaries.set_boundaries(name + dir, profile1, [5, 4], profile2, [4, 5])
-    Boundaries.set_boundaries(name + dir, profile1, [0, 5], profile2, [5, 0])
-
-    Boundaries.set_boundaries("merge_in0" + dir, profile1, [6, 7], profile2, [7, 6])
-    Boundaries.set_boundaries("merge_in1" + dir, profile1, [7, 8], profile2, [8, 7])
-    Boundaries.set_boundaries("merge_in1" + dir, profile1, [8, 9], profile2, [9, 8])
-    Boundaries.set_boundaries("merge_in1" + dir, profile1, [9, 10], profile2, [10, 9])
-    Boundaries.set_boundaries("merge_in2" + dir, profile1, [10, 11], profile2, [11, 10])
-    Boundaries.set_boundaries("merge_in2" + dir, profile1, [11, 12], profile2, [12, 11])
-    Boundaries.set_boundaries("merge_in3" + dir, profile1, [12, 13], profile2, [13, 12])
-    Boundaries.set_boundaries("merge_in3" + dir, profile1, [13, 14], profile2, [14, 13])
-    Boundaries.set_boundaries("merge_in3" + dir, profile1, [14, 15], profile2, [15, 14])
-    Boundaries.set_boundaries("merge_in0" + dir, profile1, [15, 6], profile2, [6, 15])
+def blade_hex(profile1, profile2, boundary="blade", m_z=M_LENGTH, g_x=1, g_y=1, g_z=1):
+    Hexes.set_hexes(profile1, profile2, [0, 3, 7, 4], (M_HEIGHT, M_BOUNDARY, m_z), (g_x, g_y, g_z))
+    Hexes.set_hexes(profile1, profile2, [1, 0, 4, 5], (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
+    Hexes.set_hexes(profile1, profile2, [2, 1, 5, 6], (M_HEIGHT, M_BOUNDARY, m_z), (g_x, g_y, g_z))
+    Hexes.set_hexes(profile1, profile2, [3, 2, 6, 7], (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
+    Boundaries.set_boundaries(boundary, profile1, [1, 0], profile2, [0, 1])
+    Boundaries.set_boundaries(boundary, profile1, [2, 1], profile2, [1, 2])
+    Boundaries.set_boundaries(boundary, profile1, [3, 2], profile2, [2, 3])
+    Boundaries.set_boundaries(boundary, profile1, [0, 3], profile2, [3, 0])
 
 
 def copy_blade_profile(prof, ref):
@@ -154,71 +100,40 @@ def copy_blade_profile(prof, ref):
     prof.set_b_splines(1, 0, rotate_on_angle(ref.b_splines[0][2], 180))
     prof.set_b_splines(2, 1, rotate_on_angle(ref.b_splines[1][2], 180))
     prof.set_b_splines(3, 2, rotate_on_angle(ref.b_splines[2][2], 180))
-    prof.set_b_splines(4, 3, rotate_on_angle(ref.b_splines[3][2], 180))
-    prof.set_b_splines(5, 4, rotate_on_angle(ref.b_splines[4][2], 180))
-    prof.set_b_splines(0, 5, rotate_on_angle(ref.b_splines[5][2], 180))
     Splines.set_splines(prof)
+
+
 # ==================================================================================================================== #
 # Main Code
 # ==================================================================================================================== #
-profile = []
+profile_one = []
+
 for i in range(number_of_airfoils):
-    profile.append(Profile())
-    blade_profile(profile[i], i)
+    profile_one.append(Profile())
+    blade_profile(profile_one[i], i)
 
-for i in range(number_of_airfoils - 1):
-    if i == number_of_airfoils - 2:
-        blade_hex(profile[i], profile[i + 1], 2, GRADING, True)
+for i in range(0, number_of_airfoils - 1):
+    if i == 0:
+        current_z = round(M_LENGTH * 2.25)
+    elif i == number_of_airfoils - 2:
+        current_z = round(M_LENGTH / 3)
     else:
-        blade_hex(profile[i], profile[i + 1], 2, GRADING)
+        current_z = M_LENGTH
+    blade_hex(profile_one[i], profile_one[i + 1], "blade_one", current_z)
 
-profile_copy = []
+profile_two = []
 for i in range(number_of_airfoils):
-    profile_copy.append(Profile())
-    copy_blade_profile(profile_copy[i], profile[i])
+    profile_two.append(Profile())
+    copy_blade_profile(profile_two[i], profile_one[i])
 
-for i in range(number_of_airfoils - 1):
-    if i == number_of_airfoils - 2:
-        blade_hex(profile_copy[i], profile_copy[i+1], 1, 1, True, "blade", "_two")
+for i in range(0, number_of_airfoils - 1):
+    if i == 0:
+        current_z = round(M_LENGTH * 2.25)
+    elif i == number_of_airfoils - 2:
+        current_z = round(M_LENGTH / 3)
     else:
-        blade_hex(profile_copy[i], profile_copy[i + 1], 1, 1, False, "blade", "_two")
-
-Boundaries.set_boundaries("bottom_one", profile[0], [8, 7, 6, 0])
-Boundaries.set_boundaries("bottom_one", profile[0], [9, 8, 0, 1])
-Boundaries.set_boundaries("bottom_one", profile[0], [10, 9, 1, 2])
-Boundaries.set_boundaries("bottom_one", profile[0], [11, 10, 2, 3])
-Boundaries.set_boundaries("bottom_one", profile[0], [12, 11, 3, 4])
-Boundaries.set_boundaries("bottom_one", profile[0], [13, 12, 4, 5])
-Boundaries.set_boundaries("bottom_one", profile[0], [14, 13, 5, 0])
-Boundaries.set_boundaries("bottom_one", profile[0], [15, 14, 0, 6])
-
-
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [8, 7, 6, 0])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [9, 8, 0, 1])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [10, 9, 1, 2])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [11, 10, 2, 3])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [12, 11, 3, 4])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [13, 12, 4, 5])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [14, 13, 5, 0])
-Boundaries.set_boundaries("bottom_two", profile_copy[0], [15, 14, 0, 6])
-
-Boundaries.set_boundaries("top_one", profile[-1], [0, 6, 7, 8])
-Boundaries.set_boundaries("top_one", profile[-1], [1, 0, 8, 9])
-Boundaries.set_boundaries("top_one", profile[-1], [2, 1, 9, 10])
-Boundaries.set_boundaries("top_one", profile[-1], [3, 2, 10, 11])
-Boundaries.set_boundaries("top_one", profile[-1], [4, 3, 11, 12])
-Boundaries.set_boundaries("top_one", profile[-1], [5, 4, 12, 13])
-Boundaries.set_boundaries("top_one", profile[-1], [0, 5, 13, 14])
-Boundaries.set_boundaries("top_one", profile[-1], [6, 0, 14, 15])
-
-Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 6, 7, 8])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [1, 0, 8, 9])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [2, 1, 9, 10])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [3, 2, 10, 11])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [4, 3, 11, 12])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [5, 4, 12, 13])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [0, 5, 13, 14])
-Boundaries.set_boundaries("top_two", profile_copy[-1], [6, 0, 14, 15])
+        current_z = M_LENGTH
+    blade_hex(profile_two[i], profile_two[i + 1], "blade_two", current_z)
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
 # Create blockMesh
