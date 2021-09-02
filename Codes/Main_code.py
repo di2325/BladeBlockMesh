@@ -44,7 +44,7 @@ from Codes.BlockMesh.Boundaries import Boundaries
 from Codes.Profiles.Profile import Profile
 
 M_LENGTH = 7
-M_BOUNDARY = 10
+M_BOUNDARY = 2
 
 M_0 = 3
 M_1 = 3
@@ -344,10 +344,10 @@ def create_hollow_blade():
 # ==================================================================================================================== #
 
 
-# create_solid_blade()
+create_solid_blade()
 
 
-create_hollow_blade()
+# create_hollow_blade()
 
 # ==================================================================================================================== #
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * #
