@@ -46,8 +46,8 @@ from Codes.Profiles.Profile import Profile
 M_LENGTH = 7
 M_BOUNDARY = 10
 
-M_0 = 10
-M_1 = 10
+M_0 = 3
+M_1 = 3
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
