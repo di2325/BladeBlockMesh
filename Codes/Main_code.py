@@ -12,39 +12,10 @@ Main code:
         \_ Coordinates                  - contains coordinates of all airfoils
         \_ Output                       - here you will find new blockMeshDict file
 
-    Workflow:
-        * Import required libraries and classes
-        * Search for airfoils
-        * Initiate variables
-        * Create profiles
-        * Create and store hexes, boundaries, and splines using profiles
-        * Create blockMeshDict file
-
-    # Airfoil structure:
-    # -5-----6----------7------------------
-    # -------------------------------------
-    # ------------------1------------------
-    # -------------------------------------
-    # -4-----0--------------------2-----8--
-    # -------------------------------------
-    # ------------------3------------------
-    # -------------------------------------
-    # -11----10---------9------------------
-
-    # Filler structure:
-    # 3-----0
-    # 2-----1
-
-    # Back and Front structure:
-    # 0-----1
-    # 3-----2
 """
 # ==================================================================================================================== #
 # Importing libraries and classes
 from Codes.Math.Transformation_of_vertices import *
-from Codes.Math.Custom_Math import triangle_side
-from Codes.Math.Custom_Math import triangle_rad
-from Codes.Math.Custom_Math import square_rad
 
 from Codes.BlockMesh.BlockMesh import BlockMesh
 from Codes.BlockMesh.Vertices import Vertices
