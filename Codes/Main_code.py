@@ -29,6 +29,7 @@ M_HEIGHT = 12
 M_WIDTH = 6
 M_LENGTH = 5
 M_BOUNDARY = 10
+G_BOUNDARY = 30
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
@@ -41,17 +42,17 @@ for file in os.listdir(os.path.abspath('../Coordinates')):
 # ==================================================================================================================== #
 
 
-def blade_hex(profile1, profile2, boundary="blade", m_z=M_LENGTH, g_x=1, g_y=1, g_z=1):
-    Hexes.set_hexes(profile1, profile2, [0, 9, 19, 10], None, (M_HEIGHT, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [1, 0, 10, 11], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [2, 1, 11, 12], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [3, 2, 12, 13], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [4, 3, 13, 14], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [5, 4, 14, 15], None, (M_HEIGHT, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [6, 5, 15, 16], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [7, 6, 16, 17], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [8, 7, 17, 18], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
-    Hexes.set_hexes(profile1, profile2, [9, 8, 18, 19], None, (M_WIDTH, M_BOUNDARY, m_z), (g_x, g_y, g_z))
+def blade_hex(profile1, profile2, boundary="blade", m_z=M_LENGTH):
+    Hexes.set_hexes(profile1, profile2, [0, 9, 19, 10], None, (M_HEIGHT, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [1, 0, 10, 11], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [2, 1, 11, 12], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [3, 2, 12, 13], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [4, 3, 13, 14], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [5, 4, 14, 15], None, (M_HEIGHT, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [6, 5, 15, 16], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [7, 6, 16, 17], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [8, 7, 17, 18], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
+    Hexes.set_hexes(profile1, profile2, [9, 8, 18, 19], None, (M_WIDTH, M_BOUNDARY, m_z), (1, G_BOUNDARY, 1))
     Boundaries.set_boundaries(boundary, profile1, [0, 9], profile2, [9, 0])
     Boundaries.set_boundaries(boundary, profile1, [1, 0], profile2, [0, 1])
     Boundaries.set_boundaries(boundary, profile1, [2, 1], profile2, [1, 2])
@@ -146,16 +147,16 @@ for i in range(0, number_of_airfoils - 1):
         current_z = M_LENGTH
     blade_hex(profile_two[i], profile_two[i + 1], "blade_two", current_z)
 
-Hexes.set_hexes(profile_one[0], profile_two[0], [9, 0, 10, 19], [5, 4, 14, 15], (M_HEIGHT, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [0, 1, 11, 10], [4, 3, 13, 14], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [1, 2, 12, 11], [3, 2, 12, 13], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [2, 3, 13, 12], [2, 1, 11, 12], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [3, 4, 14, 13], [1, 0, 10, 11], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [4, 5, 15, 14], [0, 9, 19, 10], (M_HEIGHT, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [5, 6, 16, 15], [9, 8, 18, 19], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [6, 7, 17, 16], [8, 7, 17, 18], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [7, 8, 18, 17], [7, 6, 16, 17], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
-Hexes.set_hexes(profile_one[0], profile_two[0], [8, 9, 19, 18], [6, 5, 15, 16], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)))
+Hexes.set_hexes(profile_one[0], profile_two[0], [9, 0, 10, 19], [5, 4, 14, 15], (M_HEIGHT, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [0, 1, 11, 10], [4, 3, 13, 14], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [1, 2, 12, 11], [3, 2, 12, 13], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [2, 3, 13, 12], [2, 1, 11, 12], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [3, 4, 14, 13], [1, 0, 10, 11], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [4, 5, 15, 14], [0, 9, 19, 10], (M_HEIGHT, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [5, 6, 16, 15], [9, 8, 18, 19], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [6, 7, 17, 16], [8, 7, 17, 18], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [7, 8, 18, 17], [7, 6, 16, 17], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
+Hexes.set_hexes(profile_one[0], profile_two[0], [8, 9, 19, 18], [6, 5, 15, 16], (M_WIDTH, M_BOUNDARY, round(M_LENGTH * 2.5)), (1, G_BOUNDARY, 1))
 
 Boundaries.set_boundaries("hub", profile_one[0], [9, 0], profile_two[0], [4, 5])
 Boundaries.set_boundaries("hub", profile_one[0], [0, 1], profile_two[0], [3, 4])
