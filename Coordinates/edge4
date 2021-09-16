@@ -1,0 +1,12 @@
+# Blender v2.91.0 OBJ File: 'phase_vi.blend'
+# www.blender.org
+mtllib 4.mtl
+o airfoil_3.004_Phase_Vi.089
+v 0.080232 -0.053962 -1.918130
+v 0.090272 -0.051559 -1.918130
+v 0.080232 0.072211 -1.918130
+v 0.090272 0.073452 -1.918130
+l 3 1
+l 1 2
+l 2 4
+l 4 3

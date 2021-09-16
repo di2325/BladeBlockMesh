@@ -159,19 +159,19 @@ def create_solid_blade():
     Boundaries.set_boundaries("hub", profile_one[0], [0, 9], profile_two[0], [5, 4])
 
 # ==================================================================================================================== #
-
+m_boundary = 2
 
 def blade_hex_hollow(profile1, profile2, m_z=M_LENGTH):
-    Hexes.set_hexes(profile1, profile2, [10, 19, 9, 0], None, (1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [11, 10, 0, 1], None, (M_0, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [12, 11, 1, 2], None, (M_1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [13, 12, 2, 3], None, (M_1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [14, 13, 3, 4], None, (M_0, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [15, 14, 4, 5], None, (1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [16, 15, 5, 6], None, (M_0, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [17, 16, 6, 7], None, (M_1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [18, 17, 7, 8], None, (M_1, 1, m_z))
-    Hexes.set_hexes(profile1, profile2, [19, 18, 8, 9], None, (M_0, 1, m_z))
+    Hexes.set_hexes(profile1, profile2, [10, 19, 9, 0], None, (1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [11, 10, 0, 1], None, (M_0, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [12, 11, 1, 2], None, (M_1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [13, 12, 2, 3], None, (M_1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [14, 13, 3, 4], None, (M_0, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [15, 14, 4, 5], None, (1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [16, 15, 5, 6], None, (M_0, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [17, 16, 6, 7], None, (M_1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [18, 17, 7, 8], None, (M_1, m_boundary, m_z))
+    Hexes.set_hexes(profile1, profile2, [19, 18, 8, 9], None, (M_0, m_boundary, m_z))
 
 
 def blade_boundaries(profile1, profile2, boundary="blade", inner=False):
@@ -248,6 +248,17 @@ def create_hollow_blade():
         profile.set_b_splines(19, 18, splines[15])
         Splines.set_splines(profile)
 
+    edge_one = []
+    for i in range(2, 4):
+        edge_one.append(Profile())
+        edge = edge_one[-1]
+        verts = get_edge_data(i)
+        Vertices.set_verts(edge, verts)
+
+    for i in range(1):
+        Hexes.set_hexes(edge_one[i], edge_one[i + 1], [3, 2, 1, 0], None, (2, 2, 10))
+        Boundaries.set_boundaries("test_o", edge_one[i], [3, 2], edge_one[i+1], [2, 3])
+
     for i in range(number_of_airfoils - 2):
         if i == 0:
             current_z = round(M_LENGTH * 1.75)
@@ -306,16 +317,16 @@ def create_hollow_blade():
     Hexes.set_hexes(profile_two[-2], profile_two[-1], [13, 16, 17, 12], None, (1, M_1, round(M_LENGTH / 2.25)))
     Hexes.set_hexes(profile_two[-2], profile_two[-1], [14, 15, 16, 13], None, (1, M_0, round(M_LENGTH / 2.25)))
 
-    Hexes.set_hexes(profile_one[0], profile_two[0], [19, 10, 0, 9], [15, 14, 4, 5], (1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [10, 11, 1, 0], [14, 13, 3, 4], (M_0, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [11, 12, 2, 1], [13, 12, 2, 3], (M_1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [12, 13, 3, 2], [12, 11, 1, 2], (M_1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [13, 14, 4, 3], [11, 10, 0, 1], (M_0, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [14, 15, 5, 4], [10, 19, 9, 0], (1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [15, 16, 6, 5], [19, 18, 8, 9], (M_0, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [16, 17, 7, 6], [18, 17, 7, 8], (M_1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [17, 18, 8, 7], [17, 16, 6, 7], (M_1, 1, M_LENGTH * 2))
-    Hexes.set_hexes(profile_one[0], profile_two[0], [18, 19, 9, 8], [16, 15, 5, 6], (M_0, 1, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [19, 10, 0, 9], [15, 14, 4, 5], (1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [10, 11, 1, 0], [14, 13, 3, 4], (M_0, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [11, 12, 2, 1], [13, 12, 2, 3], (M_1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [12, 13, 3, 2], [12, 11, 1, 2], (M_1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [13, 14, 4, 3], [11, 10, 0, 1], (M_0, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [14, 15, 5, 4], [10, 19, 9, 0], (1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [15, 16, 6, 5], [19, 18, 8, 9], (M_0, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [16, 17, 7, 6], [18, 17, 7, 8], (M_1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [17, 18, 8, 7], [17, 16, 6, 7], (M_1, m_boundary, M_LENGTH * 2))
+    Hexes.set_hexes(profile_one[0], profile_two[0], [18, 19, 9, 8], [16, 15, 5, 6], (M_0, m_boundary, M_LENGTH * 2))
 
     Boundaries.set_boundaries("hub", profile_one[0], [1, 0], profile_two[0], [4, 3])
     Boundaries.set_boundaries("hub", profile_one[0], [2, 1], profile_two[0], [3, 2])

@@ -177,6 +177,28 @@ def get_airfoil_data(airfoil_number):
     return verts, splines
 
 
+def get_edge_data(edge_number):
+    # Declaration of variables
+    coord = []
+
+    # Searching for airfoil files
+    for line in open(os.path.abspath(f'../Coordinates/edge{edge_number}'), "r"):
+        # Assign Coordinates
+        if line.startswith('v'):
+            coord.append((round(float(line.split()[1]), 4),
+                          round(float(line.split()[2]), 4),
+                          round(-1.0 * float(line.split()[3]), 4)))
+
+    coord.sort(key=lambda x: x[1], reverse=True)
+
+    if coord[0][0] > coord[1][0]:
+        coord[0], coord[1] = coord[1], coord[0]
+
+    if coord[2][0] < coord[3][0]:
+        coord[2], coord[3] = coord[3], coord[2]
+    return coord
+
+
 def create_square(length, z):
     length /= 2
     return [(-length, length, z),
