@@ -25,8 +25,8 @@ from Codes.BlockMesh.Boundaries import Boundaries
 
 from Codes.Profiles.Profile import Profile
 
-M_HEIGHT = 12
-M_WIDTH = 6
+M_HEIGHT = 20
+M_WIDTH = (M_HEIGHT * 2) / 4
 M_LENGTH = 5
 M_BOUNDARY = 10
 G_BOUNDARY = 30
