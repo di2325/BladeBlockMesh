@@ -107,8 +107,10 @@ def get_airfoil_data(airfoil_number):
 
     top_vert_0 = 0
     bot_vert_0 = 0
-    top_vert_1 = 0
-    bot_vert_1 = 0
+    top_vert_11 = 0
+    top_vert_12 = 0
+    bot_vert_11 = 0
+    bot_vert_12 = 0
     top_vert_2 = 0
     bot_vert_2 = 0
 
@@ -124,16 +126,35 @@ def get_airfoil_data(airfoil_number):
             bot_vert_0 = line
             delta = abs(boundary_0[0] - line[0])
 
-    delta = 1000
+    delta1 = 1000
+    delta2 = 1000
     for line in top:
-        if delta > abs(boundary_1[0] - line[0]):
-            top_vert_1 = line
-            delta = abs(boundary_1[0] - line[0])
-    delta = 1000
+        if delta1 > abs(boundary_1[0] - line[0]):
+            delta2 = delta1
+            top_vert_12 = top_vert_11
+            top_vert_11 = line
+            delta1 = abs(boundary_1[0] - line[0])
+        elif delta2 > abs(boundary_1[0] - line[0]):
+            top_vert_12 = line
+            delta2 = abs(boundary_1[0] - line[0])
+
+    if top_vert_11 < top_vert_12:
+        top_vert_11, top_vert_12 = top_vert_12, top_vert_11
+
+    delta1 = 1000
+    delta2 = 1000
     for line in bot:
-        if delta > abs(boundary_1[0] - line[0]):
-            bot_vert_1 = line
-            delta = abs(boundary_1[0] - line[0])
+        if delta1 > abs(boundary_1[0] - line[0]):
+            delta2 = delta1
+            bot_vert_12 = bot_vert_11
+            bot_vert_11 = line
+            delta1 = abs(boundary_1[0] - line[0])
+        elif delta2 > abs(boundary_1[0] - line[0]):
+            bot_vert_12 = line
+            delta2 = abs(boundary_1[0] - line[0])
+
+    if bot_vert_11 < bot_vert_12:
+        bot_vert_11, bot_vert_12 = bot_vert_12, bot_vert_11
 
     delta = 1000
     for line in top:
@@ -153,9 +174,9 @@ def get_airfoil_data(airfoil_number):
     for line in bot:
         if line[0] > bot_vert_0[0]:
             splines[7].append(line)
-        elif bot_vert_0[0] > line[0] > bot_vert_1[0]:
+        elif bot_vert_0[0] > line[0] > bot_vert_11[0]:
             splines[6].append(line)
-        elif bot_vert_1[0] > line[0] > bot_vert_2[0]:
+        elif bot_vert_12[0] > line[0] > bot_vert_2[0]:
             splines[5].append(line)
         elif bot_vert_2[0] > line[0]:
             splines[4].append(line)
@@ -163,40 +184,18 @@ def get_airfoil_data(airfoil_number):
     for line in top:
         if line[0] < top_vert_2[0]:
             splines[3].append(line)
-        elif top_vert_1[0] > line[0] > top_vert_2[0]:
+        elif top_vert_12[0] > line[0] > top_vert_2[0]:
             splines[2].append(line)
-        elif top_vert_0[0] > line[0] > top_vert_1[0]:
+        elif top_vert_0[0] > line[0] > top_vert_11[0]:
             splines[1].append(line)
         elif line[0] > top_vert_0[0]:
             splines[0].append(line)
 
     # Saves vertices to verts and IDs to verts_id
-    verts = [most_left[0], top_vert_0, top_vert_1, top_vert_2,
-             most_right[0], most_right[1], bot_vert_2, bot_vert_1, bot_vert_0, most_left[1]]
+    verts = [most_left[0], top_vert_0, top_vert_11, top_vert_12, top_vert_2,
+             most_right[0], most_right[1], bot_vert_2, bot_vert_12, bot_vert_11, bot_vert_0, most_left[1]]
 
     return verts, splines
-
-
-def get_edge_data(edge_number):
-    # Declaration of variables
-    coord = []
-
-    # Searching for airfoil files
-    for line in open(os.path.abspath(f'../Coordinates/edge{edge_number}'), "r"):
-        # Assign Coordinates
-        if line.startswith('v'):
-            coord.append((round(float(line.split()[1]), 4),
-                          round(float(line.split()[2]), 4),
-                          round(-1.0 * float(line.split()[3]), 4)))
-
-    coord.sort(key=lambda x: x[1], reverse=True)
-
-    if coord[0][0] > coord[1][0]:
-        coord[0], coord[1] = coord[1], coord[0]
-
-    if coord[2][0] < coord[3][0]:
-        coord[2], coord[3] = coord[3], coord[2]
-    return coord
 
 
 def create_square(length, z):
