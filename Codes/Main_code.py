@@ -25,11 +25,11 @@ from Codes.BlockMesh.Boundaries import Boundaries
 
 from Codes.Profiles.Profile import Profile
 
-M_HEIGHT = 20
+M_HEIGHT = 5
 M_WIDTH = round((M_HEIGHT * 2) / 4)
-M_LENGTH = 5
-M_BOUNDARY = 50
-G_BOUNDARY = 50
+M_LENGTH = 2
+M_BOUNDARY = 10
+G_BOUNDARY = 1
 
 # Calculating number of airfoils and hub connections
 number_of_airfoils = 0
